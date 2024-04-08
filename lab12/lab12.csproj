@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lab10 c#\Musical Instrument\Musical Instrument.csproj" />
+    <ProjectReference Include="..\Musical Instrument\Musical Instrument.csproj" />
   </ItemGroup>
 
 </Project>
