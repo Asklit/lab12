@@ -13,6 +13,7 @@ namespace lab12
 
         static void Main()
         {
+            // Изначальный и склонированный список
             MyList<MusicalInstrument>? list = new MyList<MusicalInstrument>();
             MyList<MusicalInstrument>? cloneList = new MyList<MusicalInstrument>();
             bool exit = false;
@@ -20,34 +21,36 @@ namespace lab12
             { 
                 PrintMenu();
                 int number = GetInt(min, max);
+                
+                // Варианты выбора разных пунктов меню
                 switch (number)
                 {
                     case 1:
-                        list = CreateList();
+                        list = CreateList(); // Создание списка
                         break;
                     case 2:
-                        list.PrintList();
+                        list.PrintList(); // Вывод элементов списка
                         break;
                     case 3:
-                        list = AddPoints(list);
+                        list = AddPoints(list); // Добаление элементов в список в позициями 1, 3, 5, и тд
                         break;
                     case 4:
-                        DeletePoints(list);
+                        DeletePoints(list); // Удаление элемента списка
                         break;
                     case 5:
-                        cloneList = CloneList(list);
+                        cloneList = CloneList(list); // Клонирование списка
                         break;
                     case 6:
-                        TestCloneList(list);
+                        TestCloneList(list); // Изменение информации в изначальном списке для проверки клонирования
                         break;
                     case 7:
-                        cloneList.PrintList();
+                        cloneList.PrintList(); // Вывод элементов склонированного спика
                         break;
                     case 8:
-                        list = DeleteList(list);
+                        list = DeleteList(list); // Удаление списка из памяти
                         break;
                     case 9:
-                        exit = true;
+                        exit = true; // Выход из программы
                         break;
                 }
             } while (!exit);
@@ -111,6 +114,10 @@ namespace lab12
             return newList;
         }
 
+        /// <summary>
+        /// Удаление элементов из списка начиная с выбранного
+        /// </summary>
+        /// <param name="list">Список</param>
         static void DeletePoints(MyList<MusicalInstrument> list)
         {
             Console.Clear();
@@ -148,6 +155,11 @@ namespace lab12
             }
         }
 
+        /// <summary>
+        /// Клонирование списка
+        /// </summary>
+        /// <param name="list">список</param>
+        /// <returns>склонированный список</returns>
         static MyList<MusicalInstrument> CloneList(MyList<MusicalInstrument> list)
         {
             Console.Clear();
@@ -164,6 +176,10 @@ namespace lab12
             }
         }
 
+        /// <summary>
+        /// Изменение информации в изначальном списке для проверки клонирования
+        /// </summary>
+        /// <param name="list">Список</param>
         static void TestCloneList(MyList<MusicalInstrument> list)
         {
             Console.Clear();
@@ -179,6 +195,11 @@ namespace lab12
             Console.WriteLine("Данные в изначальном списке изменены.");
         }
 
+        /// <summary>
+        /// Удаление списка из памяти
+        /// </summary>
+        /// <param name="list">Список для удаления</param>
+        /// <returns>Новый пустой список</returns>
         static MyList<MusicalInstrument>? DeleteList(MyList<MusicalInstrument> list)
         {
             Console.Clear();
