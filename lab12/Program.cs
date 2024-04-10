@@ -68,7 +68,7 @@ namespace lab12
             Console.WriteLine("3. Добавить в список элементы с номерами 1, 3, 5 и т. д.");
             Console.WriteLine("4. Удалить из списка все элементы, начиная с элемента с заданным информационным полем.");
             Console.WriteLine("5. Выполнить глубокой копирование.");
-            Console.WriteLine("6. Проверить глубокой копирование изменив данные в изначальном списке.");
+            Console.WriteLine("6. Проверить глубокой копирование изменив данные в изначальном списке. (У первого элемента название, второй заменить)");
             Console.WriteLine("7. Распечатать склонированный список.");
             Console.WriteLine("8. Удалить список из памяти.");
             Console.WriteLine("9. Завершние работы.");
@@ -85,7 +85,7 @@ namespace lab12
             int len = GetInt(1, 100);
             MyList<MusicalInstrument> newList = new MyList<MusicalInstrument>(len);
             return newList;
-        }
+        }   
 
         /// <summary>
         /// Добавление элементов 1, 3, 5 и тд

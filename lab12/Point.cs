@@ -7,7 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace lab12
 {
-    internal class Point<T> where T : ICloneable
+    public class Point<T> where T : ICloneable
     {
         /// <summary>
         /// Информация объекта

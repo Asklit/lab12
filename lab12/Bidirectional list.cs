@@ -12,7 +12,7 @@ using Musical_Instrument;
 
 namespace lab12
 {
-    internal class MyList<T> where T : IInit, ICloneable, new()
+    public class MyList<T> where T : IInit, ICloneable, new()
     {
         /// <summary>
         /// Начало списка
@@ -107,7 +107,7 @@ namespace lab12
         /// </summary>
         /// <param name="len">Длина списка</param>
         /// <exception cref="Exception">список пуст</exception>
-        public MyList(int len) 
+        public MyList(int len)
         {
             if (len <= 0) throw new Exception("список пуст");
             begin = MakeRandomData();
@@ -146,12 +146,11 @@ namespace lab12
         {
             if (collection == null) throw new Exception("пустая коллекция");
             if (collection.Length == 0) throw new Exception("пустая коллекция");
-            T newData = (T)collection.Clone();
-            begin = new Point<T>(newData);
+            begin = new Point<T>((T)collection[0].Clone());
             end = begin;
-            for (int i = 0; i < collection.Length; i++)
+            for (int i = 1; i < collection.Length; i++)
             {
-                AddToEnd(collection[i]);
+                AddToEnd((T)collection[i].Clone());
             }
         }
 
@@ -183,7 +182,6 @@ namespace lab12
             Point<T>? current = begin;
             while (current != null)
             {
-                if (current.Data == null) throw new Exception("элемент не найден");
                 if (current.Data.Equals(item)) return current;
                 current = current.Next;
             }

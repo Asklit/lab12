@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lab12", "lab12\lab12.csproj", "{11B33D07-C638-4766-AF0C-33CDFF9F5D46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Musical Instrument", "Musical Instrument\Musical Instrument.csproj", "{479C9046-2314-48E2-A867-A891EF3502E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Musical Instrument", "Musical Instrument\Musical Instrument.csproj", "{479C9046-2314-48E2-A867-A891EF3502E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListTest", "ListTest\ListTest.csproj", "{7B3F62FD-396C-4686-B23C-620FDFC1294D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{479C9046-2314-48E2-A867-A891EF3502E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{479C9046-2314-48E2-A867-A891EF3502E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{479C9046-2314-48E2-A867-A891EF3502E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3F62FD-396C-4686-B23C-620FDFC1294D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3F62FD-396C-4686-B23C-620FDFC1294D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3F62FD-396C-4686-B23C-620FDFC1294D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3F62FD-396C-4686-B23C-620FDFC1294D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
