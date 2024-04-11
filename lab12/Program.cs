@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
+using System.Security;
 
 namespace lab12
 {
@@ -32,7 +33,7 @@ namespace lab12
                         list.PrintList(); // Вывод элементов списка
                         break;
                     case 3:
-                        list = AddPoints(list); // Добаление элементов в список в позициями 1, 3, 5, и тд
+                        AddPoints(list); // Добаление элементов в список в позициями 1, 3, 5, и тд
                         break;
                     case 4:
                         DeletePoints(list); // Удаление элемента списка
@@ -91,27 +92,12 @@ namespace lab12
         /// Добавление элементов 1, 3, 5 и тд
         /// </summary>
         /// <param name="list">Список</param>
-        /// <returns>Новый сформированный список</returns>
-        static MyList<MusicalInstrument>? AddPoints(MyList<MusicalInstrument> list)
+        static void AddPoints(MyList<MusicalInstrument> list)
         {
-            Console.Clear();
             if (list.count == 0)
-            {
                 Console.WriteLine("Список пуст");
-                return list;
-            }
-            MyList<MusicalInstrument> newList = new MyList<MusicalInstrument>();
-            Point<MusicalInstrument> current = list.begin;
-            for (int i = 0; i < list.count; i++)
-            {
-                MusicalInstrument random = new();
-                random.RandomInit();
-                newList.AddToEnd(random);
-                newList.AddToEnd(current.Data);
-                current = current.Next;
-            }
+            list.AddOddItems();
             Console.WriteLine("Элементы добавлены успешно.");
-            return newList;
         }
 
         /// <summary>
@@ -120,38 +106,20 @@ namespace lab12
         /// <param name="list">Список</param>
         static void DeletePoints(MyList<MusicalInstrument> list)
         {
-            Console.Clear();
             if (list.count == 0)
-            {
                 Console.WriteLine("Список пуст");
-                return;
-            }
-            Console.WriteLine("Введите индекс значения для удаления");
-            int number = GetInt(int.MinValue, int.MaxValue);
-            MusicalInstrument point = new MusicalInstrument();
-            if (number >= 0 & number < list.count)
+            Console.WriteLine("Введите id элемента");
+            int number = GetInt(0, int.MaxValue);
+            try
             {
-                Point<MusicalInstrument> head = list.begin;
-                for (int i = 0; i < number; i++)
-                    head = head.Next;
-                point = head.Data;
+                if (list.RemoveItemById(number))
+                    Console.WriteLine("Элементы успешно удалены");
+                else
+                    Console.WriteLine("Элемент не найден");
             }
-            else
-                point.RandomInit();
-            Point<MusicalInstrument>? current = list.FindItem(point);
-            MyList<MusicalInstrument> newList = new MyList<MusicalInstrument>();
-            if (current == null)
+            catch (Exception)
             {
-                Console.WriteLine("Элемент не найден.");
-                return;
-            }
-            else
-            {
-                while (current != null) 
-                {
-                    list.RemoveItem(current.Data);
-                    current = current.Next;
-                }
+                Console.WriteLine("Класс не имеет поля id");
             }
         }
 

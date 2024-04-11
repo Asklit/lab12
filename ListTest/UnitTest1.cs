@@ -377,5 +377,76 @@ namespace ListTest
                 currentClone = currentClone.Next;
             }
         }
+
+        /// <summary>
+        /// Проверка корректности длины списка при добавлении элементов
+        /// </summary>
+        [Fact]
+        public void CheckLenInAddOddItems()
+        {
+            MyList<MusicalInstrument> list = new MyList<MusicalInstrument>(5);
+            list.AddOddItems();
+            Assert.Equal(10, list.count);
+        }
+
+        /// <summary>
+        /// Проверка корректности данных в списке при добавлении элементов
+        /// </summary>
+        [Fact]
+        public void CheckDataInAddOddItems()
+        {
+            MyList<MusicalInstrument> list = new MyList<MusicalInstrument>(5);
+            MyList<MusicalInstrument> cloneList = new MyList<MusicalInstrument>(list);
+            list.AddOddItems();
+            Point<MusicalInstrument>? current = list.begin.Next;
+            Point<MusicalInstrument>? currentClone = cloneList.begin;
+
+            for (int i = 0; current.Next != null; i++)
+            {
+                Assert.Equal(current.Data, currentClone.Data);
+                current = current.Next.Next;
+                currentClone = currentClone.Next;
+            }
+        }
+
+        /// <summary>
+        /// Проверка удаления первого элемента
+        /// </summary>
+        [Fact]
+        public void CheckCorrectRemoveFirstItemById()
+        {
+            MyList<MusicalInstrument> list = new MyList<MusicalInstrument>(5);
+            MusicalInstrument instrument = new MusicalInstrument();
+            instrument.RandomInit();
+            list.AddToBegin(instrument);
+            list.RemoveItemById(instrument.Id.Number);
+            Assert.Equal(0, list.count);
+            Assert.Null(list.begin);
+            Assert.Null(list.end);
+        }
+
+        /// <summary>
+        /// Проверка удаления не первого элемента
+        /// </summary>
+        [Fact]
+        public void CheckCorrectRemoveMiddleItemById()
+        {
+            MyList<MusicalInstrument> list = new MyList<MusicalInstrument>(2);
+            MyList<MusicalInstrument> cloneList = new MyList<MusicalInstrument>(list);
+            MusicalInstrument instrument = new MusicalInstrument();
+            instrument.RandomInit();
+            list.AddToEnd(instrument);
+            list.AddToEnd(instrument);
+            list.RemoveItemById(instrument.Id.Number);
+            Point<MusicalInstrument>? current = list.begin;
+            Point<MusicalInstrument>? currentClone = cloneList.begin;
+
+            for (int i = 0; current.Next != null; i++)
+            {
+                Assert.Equal(current.Data, currentClone.Data);
+                current = current.Next;
+                currentClone = currentClone.Next;
+            }
+        }
     }
 }

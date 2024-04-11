@@ -9,6 +9,8 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Musical_Instrument;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace lab12
 {
@@ -28,74 +30,6 @@ namespace lab12
         /// Длина списка
         /// </summary>
         public int count = 0;
-
-        /// <summary>
-        /// Заполнение элемента спика рандомными данными
-        /// </summary>
-        /// <returns>Элемент списка</returns>
-        [ExcludeFromCodeCoverage]
-        public Point<T> MakeRandomData()
-        {
-            T data = new T();
-            data.RandomInit();
-            return new Point<T>(data);
-        }
-
-        /// <summary>
-        /// Заполнение рандомных данных
-        /// </summary>
-        /// <returns>Рандомные данные точки элемента списка</returns>
-        [ExcludeFromCodeCoverage]
-        public T MakeRandomItem()
-        {
-            T data = new T();
-            data.RandomInit();
-            return data;
-        }
-
-        /// <summary>
-        /// Добавление в начало списка
-        /// </summary>
-        /// <param name="item">Данные для добавления</param>
-        public void AddToBegin(T item)
-        {
-            T newData = (T)item.Clone();
-            Point<T> newItem = new Point<T>(newData);
-            count++;
-            if ( begin != null ) 
-            {
-                begin.Prev = newItem;
-                newItem.Next = begin;
-                begin = newItem;
-            }
-            else
-            {
-                begin = newItem;
-                end = begin;
-            }
-        }
-
-        /// <summary>
-        /// Добавление в конец спика
-        /// </summary>
-        /// <param name="item">Данные для добавления</param>
-        public void AddToEnd(T item)
-        {
-            T newData = (T)item.Clone();
-            Point<T> newItem = new Point<T>(newData);
-            count++;
-            if (end != null)
-            {
-                end.Next = newItem;
-                newItem.Prev = end;
-                end = newItem;
-            }
-            else
-            {
-                begin = newItem;
-                end = begin;
-            }
-        }
 
         /// <summary>
         /// Создание пустого списка
@@ -172,6 +106,98 @@ namespace lab12
         }
 
         /// <summary>
+        /// Заполнение элемента спика рандомными данными
+        /// </summary>
+        /// <returns>Элемент списка</returns>
+        [ExcludeFromCodeCoverage]
+        public Point<T> MakeRandomData()
+        {
+            T data = new T();
+            data.RandomInit();
+            return new Point<T>(data);
+        }
+
+        /// <summary>
+        /// Заполнение рандомных данных
+        /// </summary>
+        /// <returns>Рандомные данные точки элемента списка</returns>
+        [ExcludeFromCodeCoverage]
+        public T MakeRandomItem()
+        {
+            T data = new T();
+            data.RandomInit();
+            return data;
+        }
+
+        /// <summary>
+        /// Добавление в начало списка
+        /// </summary>
+        /// <param name="item">Данные для добавления</param>
+        public void AddToBegin(T item)
+        {
+            T newData = (T)item.Clone();
+            Point<T> newItem = new Point<T>(newData);
+            count++;
+            if (begin != null)
+            {
+                begin.Prev = newItem;
+                newItem.Next = begin;
+                begin = newItem;
+            }
+            else
+            {
+                begin = newItem;
+                end = begin;
+            }
+        }
+
+        /// <summary>
+        /// Добавление в конец спика
+        /// </summary>
+        /// <param name="item">Данные для добавления</param>
+        public void AddToEnd(T item)
+        {
+            T newData = (T)item.Clone();
+            Point<T> newItem = new Point<T>(newData);
+            count++;
+            if (end != null)
+            {
+                end.Next = newItem;
+                newItem.Prev = end;
+                end = newItem;
+            }
+            else
+            {
+                begin = newItem;
+                end = begin;
+            }
+        }
+
+        public void AddOddItems()
+        {
+            Point<T> current = begin;
+            
+            while (current != null)
+            {
+                Point<T> randomItem = MakeRandomData();
+                if (current == begin)
+                {
+                    AddToBegin(randomItem.Data);
+                    current = current.Next;
+                }
+                else
+                {
+                    count++;
+                    randomItem.Prev = current.Prev;
+                    randomItem.Next = current;
+                    current.Prev.Next = randomItem;
+                    current.Prev = randomItem;
+                    current = current.Next;
+                }
+            }
+        }
+
+        /// <summary>
         /// Поиск элемента списка
         /// </summary>
         /// <param name="item">информация хранящаяся в этом элементе</param>
@@ -221,6 +247,31 @@ namespace lab12
             Point<T>? prev = pos.Prev;
             pos.Next.Prev = prev;
             pos.Prev.Next = next;
+            return true;
+        }
+
+        public bool RemoveItemById(int id)
+        {
+            Point<T>? current = begin;
+            if (current.Data is not MusicalInstrument)
+            {
+                throw new Exception("Тип данных не имеет поля id");
+            }
+            while (current != null)
+            {
+                if ((current.Data as MusicalInstrument).Id.Number == id) break;
+                current = current.Next;
+            }
+            if (current == null)
+                return false;
+            else
+            {
+                while (current != null)
+                {
+                    RemoveItem(current.Data);
+                    current = current.Next;
+                }
+            }
             return true;
         }
     }
