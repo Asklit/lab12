@@ -2,6 +2,7 @@
 using Musical_Instrument;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,14 +11,9 @@ using System.Threading.Tasks;
 
 namespace lab12_2
 {
-    internal class MyHashtable<TKey, TValue> where TValue : IInit, ICloneable, new()
+    public class MyHashtable<TKey, TValue> where TValue : IInit, ICloneable, new()
     {
-        /// <summary>
-        /// Массив значений
-        /// </summary>
-        TValue[] tableValue;
-
-        HashItem<TKey>[] HashItem;
+        public Item<TKey, TValue>[] Items;
 
         /// <summary>
         /// Массив флагов для удаления элементов
@@ -29,12 +25,13 @@ namespace lab12_2
         /// </summary>
 
         int count = 0;
+
         /// <summary>
         /// Максимальная заполненность
         /// </summary>
         double fillRatio;
 
-        public int Capacity => tableValue.Length;
+        public int Capacity => Items.Length;
         public int Count => count;
 
         /// <summary>
@@ -44,12 +41,12 @@ namespace lab12_2
         /// <param name="fillRatio"></param>
         public MyHashtable(int size=10, double fillRatio=0.72) 
         {
-            tableValue = new TValue[size];
-            HashItem = new HashItem<TKey>[size];
+            Items = new Item<TKey, TValue>[size];
             deletedFlag = new bool[size];
             this.fillRatio = fillRatio;
         }
 
+        [ExcludeFromCodeCoverage]
         /// <summary>
         /// Вывод информации элементов
         /// </summary>
@@ -58,10 +55,10 @@ namespace lab12_2
             if (count == 0) Console.WriteLine("Таблица пустая");
             else
             {
-                for (int i = 0; i < tableValue.Length; i++)
+                for (int i = 0; i < Items.Length; i++)
                 {
-                    if (tableValue[i] != null)
-                        Console.WriteLine($"{i + 1}. HashCode: {HashItem[i].HashCode} Value: {tableValue[i]}");
+                    if (Items[i] != null)
+                        Console.WriteLine($"{i + 1}. NumberInHashTable: {GetIndex(Items[i].Key) + 1} Key: {Items[i].Key} Value: {Items[i].Value}");
                     else
                         Console.WriteLine($"{i + 1}.");
                 }
@@ -73,7 +70,7 @@ namespace lab12_2
         /// </summary>
         /// <param name="key">Ключ</param>
         /// <returns>Индекс ключа в хештаблице</returns>
-        int GetIndex(TKey Key) => Math.Abs(Key.GetHashCode()) % Capacity;
+        public int GetIndex(TKey Key) => Math.Abs(Key.GetHashCode()) % Capacity;
 
         /// <summary>
         /// Добавление значения в хештаблицу с учетом колиззии
@@ -87,24 +84,23 @@ namespace lab12_2
 
             int index = GetIndex(key);
             int current = index;
-            if (tableValue[index] != null)
+            if (Items[index] != null)
             {
                 // Ищем место и идем до конца таблицы
-                while (current < tableValue.Length && tableValue[current] != null)
+                while (current < Items.Length && Items[current] != null)
                     current++;
-                if (current == tableValue.Length)
+                if (current == Items.Length)
                 {
                     // Идем с начала таблицы
                     current = 0;
-                    while (current < index && tableValue[current] != null)
+                    while (current < index && Items[current] != null)
                         current++;
                     if (current == index) throw new Exception("Нет места в таблице");
                 }
             }
             // Нашли место и добавляем элемент
-            tableValue[current] = (TValue)value.Clone();
-            HashItem<TKey> hash = new HashItem<TKey>(key);
-            HashItem[current] = hash;
+            Item<TKey, TValue> item = new Item<TKey, TValue>(key, value);
+            Items[current] = item;
             deletedFlag[current] = true;
             count++;
         }
@@ -114,7 +110,7 @@ namespace lab12_2
         /// </summary>
         /// <param name="key">Ключ</param>
         /// <returns>Наличие/отсутствие элемента</returns>
-        public bool Contains(TKey key) => tableValue[GetIndex(key)] != null;
+        public bool Contains(TKey key) => Items[GetIndex(key)] != null;
 
         /// <summary>
         /// Поиск ключа по ID
@@ -122,15 +118,15 @@ namespace lab12_2
         /// <param name="id">id элемента</param>
         /// <returns>ключ/null</returns>
         /// <exception cref="Exception">Исплючение вызванное отсутствие ID у TKey</exception>
-        public TKey? FindKeyByHashCode(int hashcode)
+        public TKey? FindKeyByIDCode(int id)
         {
-
             for (int i = 0; i < Capacity; i++)
             {
-                if (HashItem[i] != null)
+                if (Items[i] != null)
                 {
-                    if (HashItem[i].HashCode == hashcode)
-                        return HashItem[i].Key;
+                    if (Items[i].Key is MusicalInstrument)
+                        if ((Items[i].Key as MusicalInstrument).Id.Number == id)
+                            return Items[i].Key;
                 }
             }
             return default;
@@ -145,32 +141,44 @@ namespace lab12_2
         {
             int index = GetIndex(key);
             if (index < 0) return false;
-            if (tableValue[index] != null)
+            if (Items[index] != null)
             {
                 count--;
-                tableValue[index] = default;
-                HashItem[index] = default;
+                Items[index] = default;
                 deletedFlag[index] = false;
             }
             else if (deletedFlag[index] == false)
             {
                 int current = index;
                 // Ищем место и идем до конца таблицы
-                while (current < tableValue.Length && HashItem[current].Key.Equals(key))
+                while (current < Items.Length)
+                {
+                    if (Items[current] != null)
+                    {
+                        if (GetIndex(key) == GetIndex(Items[current].Key))
+                            break;
+                    }
                     current++;
-                if (current == tableValue.Length)
+                }
+                if (current == Items.Length)
                 {
                     // Идем с начала таблицы
                     current = 0;
-                    while (current < index && HashItem[current].Key.Equals(key))
+                    while (current < Items.Length)
+                    {
+                        if (Items[current] != null)
+                        {
+                            if (GetIndex(key) == GetIndex(Items[current].Key))
+                                break;
+                        }
                         current++;
+                    }
                     if (current == index) return false;
                 }
                 else
                 {
                     count--;
-                    tableValue[current] = default;
-                    HashItem[current].Key = default;
+                    Items[current] = default;
                     deletedFlag[current] = false;
                 }
             }
@@ -187,16 +195,14 @@ namespace lab12_2
         {
             if ((double)Count / Capacity > fillRatio)
             {
-                TValue[] tempValue = tableValue;
-                HashItem<TKey>[] tempKey = HashItem;
-                tableValue = new TValue[tempValue.Length * 2];
-                HashItem = new HashItem<TKey>[tempKey.Length * 2];
-                deletedFlag = new bool[tempKey.Length * 2];
+                Item<TKey, TValue>[] tempItems = Items;
+                Items = new Item<TKey, TValue>[tempItems.Length * 2];
+                deletedFlag = new bool[Items.Length * 2];
                 count = 0;
-                for (int i = 0; i < tempKey.Length; i++)
+                for (int i = 0; i < tempItems.Length; i++)
                 {
-                    if (tempKey[i] != null)
-                        AddItem(tempKey[i].Key, tempValue[i]);
+                    if (tempItems[i] != null)
+                        AddItem(tempItems[i].Key, tempItems[i].Value);
                 }
             }
             AddItem(key, value);

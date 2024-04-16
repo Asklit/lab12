@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 
 namespace lab12._2
 {
-    public class HashItem<TKey>
+    public class Item<TKey, TValue>
     {
-        public int HashCode { get; set; }
         public TKey Key { get; set; }
+        public TValue Value { get; set; }
 
-        public HashItem()
+        public Item()
         {
-            this.HashCode = -1;
             this.Key = default;
+            this.Value = default;
         }
 
         /// <summary>
-        /// Создание объекта с переданным ключем
+        /// Создание объекта с переданным ключем и значением
         /// </summary>
-        public HashItem(TKey key)
+        public Item(TKey key, TValue value)
         {
-            this.HashCode = key.GetHashCode();
             this.Key = key;
+            this.Value = value;
         }
     }
 }

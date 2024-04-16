@@ -49,7 +49,7 @@ namespace lab12_2
             Console.WriteLine("Выберите пункт меню из списка:");
             Console.WriteLine("1. Сформировать хештаблицу и заполнить ее рандомными значениями.");
             Console.WriteLine("2. Распечатать полученую хештаблицу.");
-            Console.WriteLine("3. Выполнить поиск по HashCode и удалить этот элемент.");
+            Console.WriteLine("3. Выполнить поиск по ID и удалить этот элемент.");
             Console.WriteLine("4. Добавить в таблицу рандомные значения.");
             Console.WriteLine("5. Завершние работы.");
         }
@@ -113,11 +113,11 @@ namespace lab12_2
                 Console.WriteLine("Хештаблица пустая");
                 return;
             }
-            Console.WriteLine("Введите hashcode элемента ключа для удаления");
+            Console.WriteLine("Введите ID элемента ключа для удаления");
             int number = GetInt(0, int.MaxValue);
             try
             {
-                MusicalInstrument key = ht.FindKeyByHashCode(number);
+                MusicalInstrument key = ht.FindKeyByIDCode(number);
                 if (key == null)
                     Console.WriteLine("Элемент не найден");
                 else

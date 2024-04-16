@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Musical Instrument", "Music
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListTest", "ListTest\ListTest.csproj", "{7B3F62FD-396C-4686-B23C-620FDFC1294D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab12.2", "lab12.1\lab12.2.csproj", "{10C57EB9-0946-4CF8-8FBE-ADAEE0F95ABB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lab12.2", "lab12.1\lab12.2.csproj", "{10C57EB9-0946-4CF8-8FBE-ADAEE0F95ABB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashTableTest", "HashTableTest\HashTableTest.csproj", "{A0F4D1AF-0BA5-4C20-A62F-C0943077CC7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{10C57EB9-0946-4CF8-8FBE-ADAEE0F95ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10C57EB9-0946-4CF8-8FBE-ADAEE0F95ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10C57EB9-0946-4CF8-8FBE-ADAEE0F95ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0F4D1AF-0BA5-4C20-A62F-C0943077CC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F4D1AF-0BA5-4C20-A62F-C0943077CC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F4D1AF-0BA5-4C20-A62F-C0943077CC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F4D1AF-0BA5-4C20-A62F-C0943077CC7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
