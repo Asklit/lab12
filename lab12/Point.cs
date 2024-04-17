@@ -52,15 +52,6 @@ namespace lab12
         }
 
         /// <summary>
-        /// формирование hashcode объекта
-        /// </summary>
-        /// <returns>hashcode объекта</returns>
-        public override int GetHashCode()
-        {
-            return Data == null ? 0 : Data.GetHashCode();
-        }
-
-        /// <summary>
         /// Клонирование информации объекта
         /// </summary>
         /// <returns>склонированная точка</returns>

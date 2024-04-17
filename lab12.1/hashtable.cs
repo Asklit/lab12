@@ -104,13 +104,6 @@ namespace lab12_2
             deletedFlag[current] = true;
             count++;
         }
-        
-        /// <summary>
-        /// Проверка наличия элемента по ключу
-        /// </summary>
-        /// <param name="key">Ключ</param>
-        /// <returns>Наличие/отсутствие элемента</returns>
-        public bool Contains(TKey key) => Items[GetIndex(key)] != null;
 
         /// <summary>
         /// Поиск ключа по ID
@@ -182,7 +175,6 @@ namespace lab12_2
                     deletedFlag[current] = false;
                 }
             }
-            
             return true;
         }
 

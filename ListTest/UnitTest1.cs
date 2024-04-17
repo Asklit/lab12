@@ -332,7 +332,7 @@ namespace ListTest
             instrument.RandomInit();
 
             MusicalInstrument instrument2 = new MusicalInstrument();
-            instrument.RandomInit();
+            instrument2.RandomInit();
 
             list.AddToBegin(instrument);
 
@@ -401,7 +401,7 @@ namespace ListTest
             Point<MusicalInstrument>? current = list.begin.Next;
             Point<MusicalInstrument>? currentClone = cloneList.begin;
 
-            for (int i = 0; current.Next != null; i++)
+            for (int i = 0; currentClone.Next != null; i++)
             {
                 Assert.Equal(current.Data, currentClone.Data);
                 current = current.Next.Next;

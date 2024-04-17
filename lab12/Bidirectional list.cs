@@ -44,12 +44,15 @@ namespace lab12
         public MyList(int len)
         {
             if (len <= 0) throw new Exception("список пуст");
-            begin = MakeRandomData();
+            T data = new T();
+            data.RandomInit();
+            begin = new Point<T>(data);
             end = begin;
             for (int i = 1; i < len; i++)
             {
-                T newItem = MakeRandomItem();
-                AddToBegin(newItem);
+                data = new T();
+                data.RandomInit();
+                AddToBegin(data);
             }
             count = len;
         }
@@ -106,30 +109,6 @@ namespace lab12
         }
 
         /// <summary>
-        /// Заполнение элемента спика рандомными данными
-        /// </summary>
-        /// <returns>Элемент списка</returns>
-        [ExcludeFromCodeCoverage]
-        public Point<T> MakeRandomData()
-        {
-            T data = new T();
-            data.RandomInit();
-            return new Point<T>(data);
-        }
-
-        /// <summary>
-        /// Заполнение рандомных данных
-        /// </summary>
-        /// <returns>Рандомные данные точки элемента списка</returns>
-        [ExcludeFromCodeCoverage]
-        public T MakeRandomItem()
-        {
-            T data = new T();
-            data.RandomInit();
-            return data;
-        }
-
-        /// <summary>
         /// Добавление в начало списка
         /// </summary>
         /// <param name="item">Данные для добавления</param>
@@ -176,10 +155,13 @@ namespace lab12
         public void AddOddItems()
         {
             Point<T> current = begin;
-            
+            Point<T> randomItem;
+            T data;
             while (current != null)
             {
-                Point<T> randomItem = MakeRandomData();
+                data = new T();
+                data.RandomInit();
+                randomItem = new Point<T>(data);
                 if (current == begin)
                 {
                     AddToBegin(randomItem.Data);
@@ -194,6 +176,15 @@ namespace lab12
                     current.Prev = randomItem;
                     current = current.Next;
                 }
+            }
+            if (count != 0)
+            {
+                data = new T();
+                data.RandomInit();
+                randomItem = new Point<T>(data);
+                randomItem.Prev = end;
+                randomItem.Prev.Next = randomItem;
+                end = randomItem;
             }
         }
 

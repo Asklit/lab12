@@ -96,8 +96,11 @@ namespace lab12
         {
             if (list.count == 0)
                 Console.WriteLine("Список пуст");
-            list.AddOddItems();
-            Console.WriteLine("Элементы добавлены успешно.");
+            else
+            {
+                list.AddOddItems();
+                Console.WriteLine("Элементы добавлены успешно.");
+            }
         }
 
         /// <summary>
