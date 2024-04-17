@@ -11,12 +11,6 @@ namespace lab12._2
         public TKey Key { get; set; }
         public TValue Value { get; set; }
 
-        public Item()
-        {
-            this.Key = default;
-            this.Value = default;
-        }
-
         /// <summary>
         /// Создание объекта с переданным ключем и значением
         /// </summary>

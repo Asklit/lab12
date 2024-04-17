@@ -141,12 +141,12 @@ namespace lab12_2
                 {
                     if (Items[current] != null)
                     {
-                        if (hashcode == GetIndex(Items[current].Key))
+                        if (hashcode == Items[current].Key.GetHashCode())
                             break;
                     }
                     current++;
                 }
-                if (current == Items.Length)
+                if (current == Items.Length && hashcode != Items[current].Key.GetHashCode())
                 {
                     // Идем с начала таблицы
                     current = 0;
@@ -154,7 +154,7 @@ namespace lab12_2
                     {
                         if (Items[current] != null)
                         {
-                            if (hashcode == GetIndex(Items[current].Key))
+                            if (hashcode == Items[current].Key.GetHashCode())
                                 break;
                         }
                         current++;

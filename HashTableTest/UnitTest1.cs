@@ -1,5 +1,6 @@
 using Musical_Instrument;
 using lab12_2;
+using lab12._2;
 
 namespace HashTableTest
 {
@@ -58,7 +59,7 @@ namespace HashTableTest
             guitar1.RandomInit();
             ht.AddData(mi, guitar1);
             int index = ht.GetIndex(mi);
-            ht.RemoveData(mi);
+            ht.RemoveData(mi.GetHashCode());
             Assert.Null(ht.Items[index]);
         }
 
@@ -81,15 +82,14 @@ namespace HashTableTest
             ht.AddData(mi, guitar2);
             ht.AddData(mi, guitar3);
             int index = ht.GetIndex(mi);
-            ht.RemoveData(mi);
+            ht.RemoveData(mi.GetHashCode());
             Assert.Null(ht.Items[index]);
             Assert.Equal(mi, ht.Items[index + 1].Key);
             Assert.Equal(guitar2, ht.Items[index + 1].Value);
-            ht.RemoveData(mi);
+            ht.RemoveData(mi.GetHashCode());
             Assert.Null(ht.Items[index]);
             Assert.Null(ht.Items[index + 1]);
-            index = ht.GetIndex(mi);
-            ht.RemoveData(mi);
+            ht.RemoveData(mi.GetHashCode());
             Assert.Null(ht.Items[index]);
         }
 
@@ -102,13 +102,15 @@ namespace HashTableTest
             MyHashtable<MusicalInstrument, Guitar>? ht = new MyHashtable<MusicalInstrument, Guitar>(4);
             MusicalInstrument mi = new MusicalInstrument();
             mi.RandomInit();
+            Guitar guitar1;
             for (int i = 0;i < 3; i++)
             {
-                Guitar guitar1 = new Guitar();
+                guitar1 = new Guitar();
                 guitar1.RandomInit();
                 ht.AddData(mi, guitar1);
             }
-            Assert.Equal(mi, ht.FindKeyByIDCode(mi.Id.Number));
+            Assert.Equal(mi, ht.FindKeyByHashCode(mi.GetHashCode()).Key);
+            Assert.Equal(ht.Items[Math.Abs(mi.GetHashCode())%ht.Capacity].Value, ht.FindKeyByHashCode(mi.GetHashCode()).Value);
         }
     }
 }
