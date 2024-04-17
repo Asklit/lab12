@@ -1,4 +1,5 @@
-﻿using Musical_Instrument;
+﻿using lab12._2;
+using Musical_Instrument;
 using System;
 
 namespace lab12_2
@@ -49,7 +50,7 @@ namespace lab12_2
             Console.WriteLine("Выберите пункт меню из списка:");
             Console.WriteLine("1. Сформировать хештаблицу и заполнить ее рандомными значениями.");
             Console.WriteLine("2. Распечатать полученую хештаблицу.");
-            Console.WriteLine("3. Выполнить поиск по ID и удалить этот элемент.");
+            Console.WriteLine("3. Выполнить поиск по HashCode и удалить этот элемент.");
             Console.WriteLine("4. Добавить в таблицу рандомные значения.");
             Console.WriteLine("5. Завершние работы.");
         }
@@ -113,17 +114,18 @@ namespace lab12_2
                 Console.WriteLine("Хештаблица пустая");
                 return;
             }
-            Console.WriteLine("Введите ID элемента ключа для удаления");
-            int number = GetInt(0, int.MaxValue);
+            Console.WriteLine("Введите HashCode элемента ключа для удаления");
+            int hashcode = GetInt(0, int.MaxValue);
             try
             {
-                MusicalInstrument key = ht.FindKeyByIDCode(number);
-                if (key == null)
+                Item<MusicalInstrument, Guitar> item = ht.FindKeyByHashCode(hashcode);
+                if (item == null)
                     Console.WriteLine("Элемент не найден");
                 else
                 {
-                    ht.RemoveData(key);
-                    Console.WriteLine("Элементы успешно удалены");
+                    Console.WriteLine($"Найден элемент с значением {item.Value}");
+                    ht.RemoveData(hashcode);
+                    Console.WriteLine("Элемент успешно удален");
                 }
             }
             catch (Exception)

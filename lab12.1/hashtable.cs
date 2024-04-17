@@ -58,7 +58,7 @@ namespace lab12_2
                 for (int i = 0; i < Items.Length; i++)
                 {
                     if (Items[i] != null)
-                        Console.WriteLine($"{i + 1}. NumberInHashTable: {GetIndex(Items[i].Key) + 1} Key: {Items[i].Key} Value: {Items[i].Value}");
+                        Console.WriteLine($"{i + 1}. HashCode: {Items[i].GetHashCode()} IndexInHashTable: {GetIndex(Items[i].Key) + 1} Key: {Items[i].Key} Value: {Items[i].Value}");
                     else
                         Console.WriteLine($"{i + 1}.");
                 }
@@ -106,33 +106,26 @@ namespace lab12_2
         }
 
         /// <summary>
-        /// Поиск ключа по ID
+        /// Поиск ключа по HashCode
         /// </summary>
-        /// <param name="id">id элемента</param>
-        /// <returns>ключ/null</returns>
-        /// <exception cref="Exception">Исплючение вызванное отсутствие ID у TKey</exception>
-        public TKey? FindKeyByIDCode(int id)
+        /// <param name="hashcode">hashcode элемента</param>
+        /// <returns>item/null</returns>
+        public Item<TKey, TValue> FindKeyByHashCode(int hashcode)
         {
-            for (int i = 0; i < Capacity; i++)
-            {
-                if (Items[i] != null)
-                {
-                    if (Items[i].Key is MusicalInstrument)
-                        if ((Items[i].Key as MusicalInstrument).Id.Number == id)
-                            return Items[i].Key;
-                }
-            }
+            Item<TKey, TValue> item = Items[Math.Abs(hashcode) % Capacity];
+            if (item != null)
+                return item;
             return default;
         }
 
         /// <summary>
-        /// Удаление значения по ключу
+        /// Удаление значения по hashcode
         /// </summary>
-        /// <param name="key">Ключ</param>
+        /// <param name="hashcode">hashcode</param>
         /// <returns>true/false, удален элемент или нет</returns>
-        public bool RemoveData(TKey key)
+        public bool RemoveData(int hashcode)
         {
-            int index = GetIndex(key);
+            int index = Math.Abs(hashcode) % Capacity;
             if (index < 0) return false;
             if (Items[index] != null)
             {
@@ -148,7 +141,7 @@ namespace lab12_2
                 {
                     if (Items[current] != null)
                     {
-                        if (GetIndex(key) == GetIndex(Items[current].Key))
+                        if (hashcode == GetIndex(Items[current].Key))
                             break;
                     }
                     current++;
@@ -161,7 +154,7 @@ namespace lab12_2
                     {
                         if (Items[current] != null)
                         {
-                            if (GetIndex(key) == GetIndex(Items[current].Key))
+                            if (hashcode == GetIndex(Items[current].Key))
                                 break;
                         }
                         current++;

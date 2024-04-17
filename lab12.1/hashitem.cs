@@ -25,5 +25,10 @@ namespace lab12._2
             this.Key = key;
             this.Value = value;
         }
+
+        public override int GetHashCode()
+        {
+            return Key.GetHashCode();
+        }
     }
 }
