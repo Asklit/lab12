@@ -49,6 +49,12 @@ namespace Musical_Instrument
         {
             return $"id: {Number}";
         }
+
+        public override int GetHashCode()
+        {
+            int hash = 84664589;
+            return 84664589 ^ Number;
+        }
     }
 
     public class MusicalInstrument : IInit, IComparable, ICloneable
@@ -153,7 +159,7 @@ namespace Musical_Instrument
         {
             if (obj == null) return false;
             if (obj is MusicalInstrument)
-                return this.Name == ((MusicalInstrument)obj).Name && this.Id == ((MusicalInstrument)obj).Id;
+                return this.Name == ((MusicalInstrument)obj).Name && this.Id.Number == ((MusicalInstrument)obj).Id.Number;
             return false;
         }
 
@@ -189,6 +195,12 @@ namespace Musical_Instrument
         public virtual object ShallowCopy()
         {
             return this.MemberwiseClone();
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 12345678;
+            return Math.Abs(hash ^ Id.GetHashCode() ^ Name.GetHashCode());
         }
     }
 }

@@ -1,18 +1,21 @@
 ﻿using lab12._2;
 using Musical_Instrument;
 using System;
+using System.Linq.Expressions;
+using System.Threading.Channels;
 
 namespace lab12_2
 {
     internal class Program
     {
         const int min = 1;
-        const int max = 5;
+        const int max = 6;
 
         static void Main()
         {
             // Создание хештаблицы
             MyHashtable<MusicalInstrument, Guitar>? ht = new MyHashtable<MusicalInstrument, Guitar>();
+            Item<MusicalInstrument, Guitar> item = null;
             bool exit = false;
             do
             {
@@ -29,12 +32,16 @@ namespace lab12_2
                         ht.Print(); // Вывод элементов хештаблицы
                         break;
                     case 3:
-                        DeletePoints(ht); // Поиск и удаление элемента
+                        item = SearchItem(ht); // Поиск элемента
                         break;
                     case 4:
-                        AddPoints(ht); // Добаление элементов в хештаблицу
+                        DeletePoints(ht, item); // Поиск и удаление элемента
+                        item = null;
                         break;
                     case 5:
+                        AddPoints(ht); // Добаление элементов в хештаблицу
+                        break;
+                    case 6:
                         exit = true; // Выход из программы
                         break;
                 }
@@ -50,9 +57,10 @@ namespace lab12_2
             Console.WriteLine("Выберите пункт меню из списка:");
             Console.WriteLine("1. Сформировать хештаблицу и заполнить ее рандомными значениями.");
             Console.WriteLine("2. Распечатать полученую хештаблицу.");
-            Console.WriteLine("3. Выполнить поиск по HashCode и удалить этот элемент.");
-            Console.WriteLine("4. Добавить в таблицу рандомные значения.");
-            Console.WriteLine("5. Завершние работы.");
+            Console.WriteLine("3. Выполнить поиск по id и name.");
+            Console.WriteLine("4. Удалить найденный элемент.");
+            Console.WriteLine("5. Добавить в таблицу рандомные значения.");
+            Console.WriteLine("6. Завершние работы.");
         }
 
         /// <summary>
@@ -92,45 +100,72 @@ namespace lab12_2
             }
             Console.WriteLine("Введите какое количество элементов хотите добавить.");
             int count = GetInt(1, 100);
+            bool flag;
             for (int i = 0; i < count; i++)
-            {
-                MusicalInstrument mi = new();
-                mi.RandomInit();
-                Guitar guitar = new Guitar();
-                guitar.RandomInit();
-                ht.AddData(mi, guitar);
+            { 
+                flag = false;
+                while (!flag)
+                {
+                    MusicalInstrument mi = new();
+                    mi.RandomInit();
+                    Guitar guitar = new Guitar();
+                    guitar.RandomInit();
+                    flag = ht.AddData(mi, guitar);
+                }
             }
-            Console.WriteLine("Элементы добавлены успешно.");
+            Console.WriteLine("Элементы добавлены успешно");
+        }
+
+        /// <summary>
+        /// Поиск элемента с ключом введенным ID и именем
+        /// </summary>
+        /// <param name="ht">Хештаблица</param>
+        static Item<MusicalInstrument, Guitar> SearchItem(MyHashtable<MusicalInstrument, Guitar> ht)
+        {
+            if (ht.Count == 0)
+            {
+                Console.WriteLine("Хештаблица пустая");
+                return default;
+            }
+            Console.WriteLine("Введите id элемента ключа для удаления");
+            int id = GetInt(0, int.MaxValue);
+            Console.WriteLine("Введите имя элемента ключа для удаления");
+            string name = Console.ReadLine();
+            try
+            {
+                Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(id, name);
+                if (item == null)
+                {
+                    Console.WriteLine("Элемент не найден");
+                    return default;
+                }
+                else
+                {
+                    Console.WriteLine($"Найден элемент с значением {item.Value}");
+                    return item;
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Класс не имеет поля id");
+                return default;
+            }
         }
 
         /// <summary>
         /// Удаление элемента с ключом введенным ID
         /// </summary>
         /// <param name="ht">Хештаблица</param>
-        static void DeletePoints(MyHashtable<MusicalInstrument, Guitar> ht)
+        static void DeletePoints(MyHashtable<MusicalInstrument, Guitar> ht, Item<MusicalInstrument, Guitar> item)
         {
             if (ht.Count == 0)
-            {
                 Console.WriteLine("Хештаблица пустая");
-                return;
-            }
-            Console.WriteLine("Введите HashCode элемента ключа для удаления");
-            int hashcode = GetInt(0, int.MaxValue);
-            try
+            else if (item == null)
+                Console.WriteLine("Элемент для удаления не определен.");
+            else
             {
-                Item<MusicalInstrument, Guitar> item = ht.FindKeyByHashCode(hashcode);
-                if (item == null)
-                    Console.WriteLine("Элемент не найден");
-                else
-                {
-                    Console.WriteLine($"Найден элемент с значением {item.Value}");
-                    ht.RemoveData(hashcode);
-                    Console.WriteLine("Элемент успешно удален");
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Класс не имеет поля id");
+                ht.RemoveData(item);
+                Console.WriteLine($"Элемент с значением {item.Value} успешно удален");
             }
         }
 

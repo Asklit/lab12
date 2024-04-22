@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace lab12_2
 {
-    public class MyHashtable<TKey, TValue> where TValue : IInit, ICloneable, new()
+    public class MyHashtable<TKey, TValue> where TValue : IInit, ICloneable, new() where TKey : ICloneable
     {
         public Item<TKey, TValue>[] Items;
 
@@ -58,7 +59,7 @@ namespace lab12_2
                 for (int i = 0; i < Items.Length; i++)
                 {
                     if (Items[i] != null)
-                        Console.WriteLine($"{i + 1}. HashCode: {Items[i].GetHashCode()} IndexInHashTable: {GetIndex(Items[i].Key) + 1} Key: {Items[i].Key} Value: {Items[i].Value}");
+                        Console.WriteLine($"{i + 1}. Index: {GetIndex(Items[i].Key) + 1,-10} Key: {Items[i].Key,-30} Value: {Items[i].Value}");
                     else
                         Console.WriteLine($"{i + 1}.");
                 }
@@ -110,30 +111,14 @@ namespace lab12_2
         /// </summary>
         /// <param name="hashcode">hashcode элемента</param>
         /// <returns>item/null</returns>
-        public Item<TKey, TValue> FindKeyByHashCode(int hashcode)
+        public Item<TKey, TValue> FindKeyByData(int id, string name)
         {
-            Item<TKey, TValue> item = Items[Math.Abs(hashcode) % Capacity];
-            if (item != null)
+            MusicalInstrument musicalInstrument = new MusicalInstrument(name, id);
+            int index = Math.Abs(musicalInstrument.GetHashCode()) % Capacity;
+            Item<TKey, TValue> item = Items[index];
+            if (item != null && musicalInstrument.Equals(item.Key))
                 return item;
-            return default;
-        }
-
-        /// <summary>
-        /// Удаление значения по hashcode
-        /// </summary>
-        /// <param name="hashcode">hashcode</param>
-        /// <returns>true/false, удален элемент или нет</returns>
-        public bool RemoveData(int hashcode)
-        {
-            int index = Math.Abs(hashcode) % Capacity;
-            if (index < 0) return false;
-            if (Items[index] != null)
-            {
-                count--;
-                Items[index] = default;
-                deletedFlag[index] = false;
-            }
-            else if (deletedFlag[index] == false)
+            else
             {
                 int current = index;
                 // Ищем место и идем до конца таблицы
@@ -141,32 +126,76 @@ namespace lab12_2
                 {
                     if (Items[current] != null)
                     {
-                        if (hashcode == Items[current].Key.GetHashCode())
+                        if (musicalInstrument.Equals(Items[current].Key))
                             break;
                     }
                     current++;
                 }
-                if (current == Items.Length && hashcode != Items[current].Key.GetHashCode())
+                if (current == Items.Length)
                 {
                     // Идем с начала таблицы
                     current = 0;
-                    while (current < Items.Length)
+                    while (current < index)
                     {
                         if (Items[current] != null)
                         {
-                            if (hashcode == Items[current].Key.GetHashCode())
+                            if (musicalInstrument.Equals(Items[current].Key))
+                                break;
+                        }
+                        current++;
+                    }
+                    if (current == index) return default;
+                }
+                return Items[current];
+            }
+
+        }
+
+        /// <summary>
+        /// Удаление значения по hashcode
+        /// </summary>
+        /// <param name="hashcode">hashcode</param>
+        /// <returns>true/false, удален элемент или нет</returns>
+        public bool RemoveData(Item<MusicalInstrument, Guitar> item)
+        {
+            int index = Math.Abs(item.GetHashCode()) % Capacity;
+            if (Items[index] != null && item.Key.Equals(Items[index].Key))
+            {
+                count--;
+                Items[index] = default;
+                deletedFlag[index] = false;
+            }
+            else if (deletedFlag[index] == false || (Items[index] != null && !item.Key.Equals(Items[index].Key)))
+            {
+                int current = index;
+                // Ищем место и идем до конца таблицы
+                while (current < Items.Length)
+                {
+                    if (Items[current] != null)
+                    {
+                        if (item.Key.Equals(Items[current].Key))
+                            break;
+                    }
+                    current++;
+                }
+                if (current == Items.Length)
+                {
+                    // Идем с начала таблицы
+                    current = 0;
+                    while (current < index)
+                    {
+                        if (Items[current] != null)
+                        {
+                            if (item.Key.Equals(Items[current].Key))
                                 break;
                         }
                         current++;
                     }
                     if (current == index) return false;
                 }
-                else
-                {
-                    count--;
-                    Items[current] = default;
-                    deletedFlag[current] = false;
-                }
+                count--;
+                Items[current] = default;
+                deletedFlag[current] = false;
             }
             return true;
         }
@@ -176,8 +205,11 @@ namespace lab12_2
         /// </summary>
         /// <param name="key">Ключ</param>
         /// <param name="value">Значение</param>
-        public void AddData(TKey key, TValue value) 
+        public bool AddData(TKey key, TValue value)
         {
+            if (Items[GetIndex(key)] != null)
+                if (key.Equals(Items[GetIndex(key)].Key) && value.Equals(Items[GetIndex(key)].Value))
+                    return false;
             if ((double)Count / Capacity > fillRatio)
             {
                 Item<TKey, TValue>[] tempItems = Items;
@@ -191,6 +223,7 @@ namespace lab12_2
                 }
             }
             AddItem(key, value);
+            return true;
         }
     }
 }
