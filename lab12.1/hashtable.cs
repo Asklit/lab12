@@ -14,6 +14,9 @@ namespace lab12_2
 {
     public class MyHashtable<TKey, TValue> where TValue : IInit, ICloneable, new() where TKey : ICloneable
     {
+        /// <summary>
+        /// Пары ключ значение
+        /// </summary>
         public Item<TKey, TValue>[] Items;
 
         /// <summary>
@@ -59,7 +62,8 @@ namespace lab12_2
                 for (int i = 0; i < Items.Length; i++)
                 {
                     if (Items[i] != null)
-                        Console.WriteLine($"{i + 1}. Index: {GetIndex(Items[i].Key) + 1,-10} Key: {Items[i].Key,-30} Value: {Items[i].Value}");
+                        if (Items[i].Key != null)
+                            Console.WriteLine($"{i + 1}. Index: {GetIndex(Items[i].Key) + 1,-10} Key: {Items[i].Key,-30} Value: {Items[i].Value}");
                     else
                         Console.WriteLine($"{i + 1}.");
                 }
@@ -107,16 +111,14 @@ namespace lab12_2
         }
 
         /// <summary>
-        /// Поиск ключа по HashCode
+        /// Поиск ключа по Tkey
         /// </summary>
-        /// <param name="hashcode">hashcode элемента</param>
         /// <returns>item/null</returns>
-        public Item<TKey, TValue> FindKeyByData(int id, string name)
+        public Item<TKey, TValue> FindKeyByData(TKey key)
         {
-            MusicalInstrument musicalInstrument = new MusicalInstrument(name, id);
-            int index = Math.Abs(musicalInstrument.GetHashCode()) % Capacity;
+            int index = Math.Abs(key.GetHashCode()) % Capacity;
             Item<TKey, TValue> item = Items[index];
-            if (item != null && musicalInstrument.Equals(item.Key))
+            if (item != null && key.Equals(item.Key))
                 return item;
             else
             {
@@ -126,7 +128,7 @@ namespace lab12_2
                 {
                     if (Items[current] != null)
                     {
-                        if (musicalInstrument.Equals(Items[current].Key))
+                        if (key.Equals(Items[current].Key))
                             break;
                     }
                     current++;
@@ -139,7 +141,7 @@ namespace lab12_2
                     {
                         if (Items[current] != null)
                         {
-                            if (musicalInstrument.Equals(Items[current].Key))
+                            if (key.Equals(Items[current].Key))
                                 break;
                         }
                         current++;
@@ -152,52 +154,21 @@ namespace lab12_2
         }
 
         /// <summary>
-        /// Удаление значения по hashcode
+        /// Удаление значения Tkey
         /// </summary>
-        /// <param name="hashcode">hashcode</param>
         /// <returns>true/false, удален элемент или нет</returns>
-        public bool RemoveData(Item<MusicalInstrument, Guitar> item)
+        public bool RemoveData(TKey key)
         {
-            int index = Math.Abs(item.GetHashCode()) % Capacity;
-            if (Items[index] != null && item.Key.Equals(Items[index].Key))
+            Item<TKey, TValue> item = FindKeyByData(key);
+            if (item != null)
             {
                 count--;
-                Items[index] = default;
-                deletedFlag[index] = false;
+                item.Key = default(TKey);
+                item.Value = default(TValue);
+                return true;
             }
-            else if (deletedFlag[index] == false || (Items[index] != null && !item.Key.Equals(Items[index].Key)))
-            {
-                int current = index;
-                // Ищем место и идем до конца таблицы
-                while (current < Items.Length)
-                {
-                    if (Items[current] != null)
-                    {
-                        if (item.Key.Equals(Items[current].Key))
-                            break;
-                    }
-                    current++;
-                }
-                if (current == Items.Length)
-                {
-                    // Идем с начала таблицы
-                    current = 0;
-                    while (current < index)
-                    {
-                        if (Items[current] != null)
-                        {
-                            if (item.Key.Equals(Items[current].Key))
-                                break;
-                        }
-                        current++;
-                    }
-                    if (current == index) return false;
-                }
-                count--;
-                Items[current] = default;
-                deletedFlag[current] = false;
-            }
-            return true;
+            else 
+                return false;
         }
 
         /// <summary>

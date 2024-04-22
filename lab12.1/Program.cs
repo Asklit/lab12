@@ -35,7 +35,7 @@ namespace lab12_2
                         item = SearchItem(ht); // Поиск элемента
                         break;
                     case 4:
-                        DeletePoints(ht, item); // Поиск и удаление элемента
+                        DeletePoints(ht, item.Key); // Поиск и удаление элемента
                         item = null;
                         break;
                     case 5:
@@ -133,7 +133,7 @@ namespace lab12_2
             string name = Console.ReadLine();
             try
             {
-                Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(id, name);
+                Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(new MusicalInstrument(name, id));
                 if (item == null)
                 {
                     Console.WriteLine("Элемент не найден");
@@ -156,16 +156,16 @@ namespace lab12_2
         /// Удаление элемента с ключом введенным ID
         /// </summary>
         /// <param name="ht">Хештаблица</param>
-        static void DeletePoints(MyHashtable<MusicalInstrument, Guitar> ht, Item<MusicalInstrument, Guitar> item)
+        static void DeletePoints(MyHashtable<MusicalInstrument, Guitar> ht, MusicalInstrument key)
         {
             if (ht.Count == 0)
                 Console.WriteLine("Хештаблица пустая");
-            else if (item == null)
+            else if (key == null)
                 Console.WriteLine("Элемент для удаления не определен.");
             else
             {
-                ht.RemoveData(item);
-                Console.WriteLine($"Элемент с значением {item.Value} успешно удален");
+                ht.RemoveData(key);
+                Console.WriteLine($"Элемент успешно удален");
             }
         }
 

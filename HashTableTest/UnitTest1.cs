@@ -3,6 +3,7 @@ using lab12_2;
 using lab12._2;
 using Xunit;
 using Microsoft.VisualStudio.TestPlatform.Common.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace HashTableTest
 {
@@ -83,8 +84,9 @@ namespace HashTableTest
             int index = 0;
             while (ht.Items[index] == null)
                 index++;
-            Assert.Equal(ht.FindKeyByData(ht.Items[index].Key.Id.Number, ht.Items[index].Key.Name).Key, ht.Items[index].Key);
-            Assert.Equal(ht.FindKeyByData(ht.Items[index].Key.Id.Number, ht.Items[index].Key.Name).Value, ht.Items[index].Value);
+            Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(ht.Items[index].Key);
+            Assert.Equal(item.Key, ht.Items[index].Key);
+            Assert.Equal(item.Value, ht.Items[index].Value);
         }
 
         /// <summary>
@@ -105,8 +107,9 @@ namespace HashTableTest
             int index = ht.Capacity-1;
             while (ht.Items[index] == null)
                 index--;
-            Assert.Equal(ht.FindKeyByData(ht.Items[index].Key.Id.Number, ht.Items[index].Key.Name).Key, ht.Items[index].Key);
-            Assert.Equal(ht.FindKeyByData(ht.Items[index].Key.Id.Number, ht.Items[index].Key.Name).Value, ht.Items[index].Value);
+            Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(ht.Items[index].Key);
+            Assert.Equal(item.Key, ht.Items[index].Key);
+            Assert.Equal(item.Value, ht.Items[index].Value);
         }
 
         /// <summary>
@@ -140,7 +143,7 @@ namespace HashTableTest
             while (ht.Items[ht.Capacity-1].GetHashCode() % ht.Capacity != instr.GetHashCode()%ht.Capacity)
                 instr.RandomInit();
             ht.AddData(instr, newguitar);
-            Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(instr.Id.Number, instr.Name);
+            Item<MusicalInstrument, Guitar> item = ht.FindKeyByData(instr);
             Assert.Equal(item.Key, instr);
             Assert.Equal(item.Value, newguitar);
         }
@@ -158,8 +161,9 @@ namespace HashTableTest
             guitar.RandomInit();
             ht.AddData(mi, guitar);
             int index = ht.GetIndex(mi);
-            ht.RemoveData(new Item<MusicalInstrument, Guitar>(mi, guitar));
-            Assert.Null(ht.Items[index]);
+            ht.RemoveData(mi);
+            Assert.Null(ht.Items[index].Key);
+            Assert.Null(ht.Items[index].Value);
         }
 
         /// <summary>
@@ -189,10 +193,10 @@ namespace HashTableTest
             ht.AddData(mi1, guitar1);
             ht.AddData(mi2, guitar2);
 
-            Assert.True(ht.RemoveData(new Item<MusicalInstrument, Guitar>(mi1, guitar1)));
-            Assert.Null(ht.FindKeyByData(mi1.Id.Number, mi1.Name));
-            Assert.Equal(ht.FindKeyByData(mi2.Id.Number, mi2.Name).Key, mi2);
-            Assert.Equal(ht.FindKeyByData(mi2.Id.Number, mi2.Name).Value, guitar2);
+            Assert.True(ht.RemoveData(mi1));
+            Assert.Null(ht.FindKeyByData(mi1));
+            Assert.Equal(ht.FindKeyByData(mi2).Key, mi2);
+            Assert.Equal(ht.FindKeyByData(mi2).Value, guitar2);
         }
 
         /// <summary>
@@ -222,10 +226,10 @@ namespace HashTableTest
             ht.AddData(mi1, guitar1);
             ht.AddData(mi2, guitar2);
 
-            ht.RemoveData(new Item<MusicalInstrument, Guitar>(mi2, guitar2));
-            Assert.Null(ht.FindKeyByData(mi2.Id.Number, mi2.Name));
-            Assert.Equal(ht.FindKeyByData(mi1.Id.Number, mi1.Name).Key, mi1);
-            Assert.Equal(ht.FindKeyByData(mi1.Id.Number, mi1.Name).Value, guitar1);
+            ht.RemoveData(mi2);
+            Assert.Null(ht.FindKeyByData(mi2));
+            Assert.Equal(ht.FindKeyByData(mi1).Key, mi1);
+            Assert.Equal(ht.FindKeyByData(mi1).Value, guitar1);
         }
 
         /// <summary>
@@ -259,8 +263,8 @@ namespace HashTableTest
             while (ht.Items[ht.Capacity - 1].GetHashCode() % ht.Capacity != instr.GetHashCode() % ht.Capacity)
                 instr.RandomInit();
             ht.AddData(instr, newguitar);
-            ht.RemoveData(new Item<MusicalInstrument, Guitar>(instr, newguitar));
-            Assert.Null(ht.FindKeyByData(instr.Id.Number, instr.Name));
+            ht.RemoveData(instr);
+            Assert.Null(ht.FindKeyByData(instr));
         }
 
         /// <summary>
@@ -283,7 +287,7 @@ namespace HashTableTest
             instr.RandomInit();
             var newguitar = new Guitar();
             newguitar.RandomInit();
-            Assert.False(ht.RemoveData(new Item<MusicalInstrument, Guitar>(instr, newguitar)));
+            Assert.False(ht.RemoveData(instr));
         }
     }
 }
