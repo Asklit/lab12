@@ -176,9 +176,11 @@ namespace Musical_Instrument
         /// </summary>
         public virtual int CompareTo(object? obj)
         {
-            if (obj == null) return -1;
-            if (obj is not MusicalInstrument) return -1;
-            return String.Compare(this.Name, ((MusicalInstrument)obj).Name);
+            if (obj == null) return -2;
+            if (obj is not MusicalInstrument) return -2;
+            if (this.Id.Number == ((MusicalInstrument)obj).Id.Number)
+                return 0;
+            return this.Id.Number > ((MusicalInstrument)obj).Id.Number ? 1 : -1;
         }
 
         /// <summary>

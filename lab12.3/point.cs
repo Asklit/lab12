@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lab12._3
 {
-    internal class Point<T> where T : IComparable
+    public class Point<T> where T : IComparable
     {
         /// <summary>
         /// Информация объекта
