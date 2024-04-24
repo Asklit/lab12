@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -17,7 +18,7 @@ namespace lab12._3
         /// <summary>
         /// Вершина дерева
         /// </summary>
-        Point<T> root = null;
+        public Point<T> root = null;
 
         /// <summary>
         /// Количество элементов в дереве
@@ -65,6 +66,7 @@ namespace lab12._3
             return newItem;
         }
 
+        [ExcludeFromCodeCoverage]
         /// <summary>
         /// Вызов рекурсивной печати дерева
         /// </summary>
@@ -73,6 +75,7 @@ namespace lab12._3
             PrintRecursiveMethod(root, 0);
         }
 
+        [ExcludeFromCodeCoverage]
         /// <summary>
         /// Рекурсивная печать дерева
         /// </summary>
@@ -95,7 +98,7 @@ namespace lab12._3
         /// </summary>
         /// <param name="data">значение элемента</param>
         /// <param name="point">текущая точка</param>
-        void AddPointToFindTree(T data, Point<T>? point)
+        public void AddPointToFindTree(T data, Point<T>? point)
         {
             Point<T>? current = null;
             bool isExist = false;
@@ -106,7 +109,7 @@ namespace lab12._3
                     isExist = true;
                 else
                 {
-                    if (point.Data.CompareTo(data) < 0)
+                    if (point.Data.CompareTo(data) > 0)
                         point = point.Left;
                     else
                         point = point.Right;
@@ -115,7 +118,7 @@ namespace lab12._3
             if (isExist)
                 return;
             Point<T> newPoint = new Point<T>(data);
-            if (current.Data.CompareTo(data) < 0)
+            if (current.Data.CompareTo(data) > 0)
                 current.Left = newPoint;
             else
                 current.Right = newPoint;
@@ -127,7 +130,7 @@ namespace lab12._3
         /// <param name="point">текущая точка</param>
         /// <param name="array">массив</param>
         /// <param name="index">текущий индекс массива для заполнения</param>
-        void ConvertTreeToArray(Point<T>? point, T[] array, ref int index)
+        public void ConvertTreeToArray(Point<T>? point, T[] array, ref int index)
         {
             if (point != null)
             {
@@ -182,6 +185,10 @@ namespace lab12._3
             return foundPoint.Data;
         }
 
+        /// <summary>
+        /// Рекурсивное удаление ссылок между вершинами дерева
+        /// </summary>
+        /// <param name="point">текущая точка</param>
         Point<T>? DeleteRecursive(Point<T>? point)
         {
             if (point != null)
