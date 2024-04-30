@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lab12._3
 {
-    public class Point<T> where T : IComparable
+    public class Point<T> : IComparable where T : IComparable
     {
         /// <summary>
         /// Информация объекта
@@ -52,9 +52,11 @@ namespace lab12._3
             return Data == null ? "" : Data.ToString();
         }
 
-        public int CompareTo(Point<T> other)
+        public int CompareTo(object other)
         {
-            return Data.CompareTo(other.Data);
+            if (other is Point<T>)
+                return Data.CompareTo(((Point<T>)other).Data);
+            else throw new Exception("Некорректный тип данных");
         }
     }
 }

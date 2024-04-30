@@ -102,14 +102,15 @@ namespace lab12._3
         {
             Point<T>? current = null;
             bool isExist = false;
+            Point<T> newPoint = new Point<T>(data);
             while (point != null && !isExist)
             {
                 current = point;
-                if (point.Data.CompareTo(data) == 0)
+                if (point.CompareTo(newPoint) == 0)
                     isExist = true;
                 else
                 {
-                    if (point.Data.CompareTo(data) > 0)
+                    if (point.CompareTo(newPoint) > 0)
                         point = point.Left;
                     else
                         point = point.Right;
@@ -117,8 +118,7 @@ namespace lab12._3
             }
             if (isExist)
                 return;
-            Point<T> newPoint = new Point<T>(data);
-            if (current.Data.CompareTo(data) > 0)
+            if (current.CompareTo(newPoint) > 0)
                 current.Left = newPoint;
             else
                 current.Right = newPoint;

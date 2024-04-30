@@ -10,7 +10,7 @@ namespace lab12
 
         static void Main()
         {
-            // Создание хештаблицы
+            // Создание дерева
             MyTree<MusicalInstrument>? tree = null;
             MyTree<MusicalInstrument>? findTree = null;
             bool exit = false;

@@ -1,6 +1,8 @@
 using lab12._3;
 using Musical_Instrument;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 
 namespace TreeTest
 {
@@ -107,6 +109,9 @@ namespace TreeTest
             Assert.Null(pointRight.Right);
         }
 
+        /// <summary>
+        /// Тестирование преобразование в строку
+        /// </summary>
         [Fact]
         public void TestToStringPoint()
         {
@@ -114,6 +119,39 @@ namespace TreeTest
             data.RandomInit();
             Point<MusicalInstrument> point = new Point<MusicalInstrument>(data);
             Assert.Equal(point.ToString(), data.ToString());
+        }
+
+        /// <summary>
+        /// Тестирование итерфейса IComparable
+        /// </summary>
+        [Fact]
+        public void TestCompareTo()
+        {
+            Point<MusicalInstrument>[] arr = new Point<MusicalInstrument>[10];
+            for (int i = 0; i < 10; i++)
+            {
+                MusicalInstrument data = new MusicalInstrument();
+                data.RandomInit();
+                Point<MusicalInstrument> point = new Point<MusicalInstrument>(data);
+                arr[i] = point;
+            }
+            Array.Sort(arr);
+            for (int i = 0;i < arr.Length - 1;i++)
+            {
+                Assert.Equal(-1, arr[i].CompareTo(arr[i + 1]));
+            }
+        }
+
+        [Fact]
+        public void TestExceptionCompareTo() 
+        {
+            MusicalInstrument data = new MusicalInstrument();
+            data.RandomInit();
+            Point<MusicalInstrument> point = new Point<MusicalInstrument>(data);
+            Guitar data2 = new Guitar();
+            data2.RandomInit();
+            Point<Guitar> point2 = new Point<Guitar>(data2);
+            Assert.Throws<Exception>(() => point.CompareTo(point2));
         }
     }
 }
