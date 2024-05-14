@@ -241,6 +241,7 @@ namespace lab12
             return true;
         }
 
+        
         public bool RemoveItemById(int id)
         {
             Point<T>? current = begin;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,7 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace lab12._3
 {
-    public class MyTree<T> where T : IInit, IComparable, new()
+    public class MyTree<T> where T : IInit, IComparable, ICloneable, new()
     {
         /// <summary>
         /// Вершина дерева
@@ -23,7 +24,7 @@ namespace lab12._3
         /// <summary>
         /// Количество элементов в дереве
         /// </summary>
-        int count = 0;
+        protected int count = 0;
 
         public int Count => count;
 
@@ -31,7 +32,7 @@ namespace lab12._3
         /// Констурктор создания сбалансированного дерева заданной длины
         /// </summary>
         /// <param name="len">длина дерева</param>
-        public MyTree(int len)
+        public MyTree(int len = 10)
         {
             count = len;
             root = MakeTree(len);
@@ -45,6 +46,30 @@ namespace lab12._3
         {
             count = len;
             root = newRoot;
+        }
+
+        /// <summary>
+        /// Констурктор клонирования дерева
+        /// </summary>
+        public MyTree(MyTree<T> tree)
+        {
+            root = new Point<T>(tree.root);
+            count = tree.count;
+            CloneTree(root, tree.root);
+        }
+
+        /// <summary>
+        /// Клонирование дерева
+        /// </summary>
+        Point<T> CloneTree(Point<T> current, Point<T> treeCurrent)
+        {   
+            if (treeCurrent != null)
+            {
+                current = new Point<T>(treeCurrent);
+                current.Left = CloneTree(current.Left, treeCurrent.Left);
+                current.Right = CloneTree(current.Right, treeCurrent.Right);
+            }
+            return current;
         }
 
         /// <summary>
@@ -100,28 +125,35 @@ namespace lab12._3
         /// <param name="point">текущая точка</param>
         public void AddPointToFindTree(T data, Point<T>? point)
         {
-            Point<T>? current = null;
-            bool isExist = false;
-            Point<T> newPoint = new Point<T>(data);
-            while (point != null && !isExist)
+            if (point == null)
             {
-                current = point;
-                if (point.CompareTo(newPoint) == 0)
-                    isExist = true;
-                else
-                {
-                    if (point.CompareTo(newPoint) > 0)
-                        point = point.Left;
-                    else
-                        point = point.Right;
-                }
+                root = new Point<T>(data);
             }
-            if (isExist)
-                return;
-            if (current.CompareTo(newPoint) > 0)
-                current.Left = newPoint;
             else
-                current.Right = newPoint;
+            {
+                Point<T>? current = null;
+                bool isExist = false;
+                Point<T> newPoint = new Point<T>(data);
+                while (point != null && !isExist)
+                {
+                    current = point;
+                    if (point.CompareTo(newPoint) == 0)
+                        isExist = true;
+                    else
+                    {
+                        if (point.CompareTo(newPoint) > 0)
+                            point = point.Left;
+                        else
+                            point = point.Right;
+                    }
+                }
+                if (isExist)
+                    return;
+                if (current.CompareTo(newPoint) > 0)
+                    current.Left = newPoint;
+                else
+                    current.Right = newPoint;
+            }
         }
         
         /// <summary>
@@ -201,11 +233,60 @@ namespace lab12._3
         }
 
         /// <summary>
+        /// Рекусивное удаление 
+        /// </summary>
+        protected Point<T> RecursiveRemove(Point<T> current, Point<T> item, ref bool flag)
+        {
+            if (current != null)
+            {
+                if (current.CompareTo(item) > 0)
+                    current.Left = RecursiveRemove(current.Left, item, ref flag);
+                if (current.CompareTo(item) < 0)
+                    current.Right = RecursiveRemove(current.Right, item, ref flag);
+                if (current.CompareTo(item) == 0)
+                {
+                    count--;
+                    Point<T>? point = null;
+                    if (current.Left == null || current.Right == null)
+                    {
+                        if (current.Left == null)
+                            point = current.Right;
+                        if (current.Right == null)
+                            point = current.Left;
+                        if (point == null)
+                        {
+                            current = null;
+                        }
+                        else
+                        {
+                            current = point;
+                        }
+                    }
+                    else
+                    {
+                        Point<T> foundPoint = new Point<T>();
+                        foundPoint.Data = new T();
+                        SeachMaxItem(current.Left, ref foundPoint);
+                        current.Data = foundPoint.Data;
+                        bool newFlag = false;
+                        current.Left = RecursiveRemove(current.Left, foundPoint, ref newFlag);
+                    }
+                    flag = true;
+                }
+            }
+            if (count == 0)
+                root = null;
+            return current;
+
+        }
+
+        /// <summary>
         /// Удаление дерева из памяти
         /// </summary>
         public void DeleteTree()
         {
             DeleteRecursive(root);
+            root = null;
         }
     }
 }

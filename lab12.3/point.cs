@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lab12._3
 {
-    public class Point<T> : IComparable where T : IComparable
+    public class Point<T> : IComparable where T : IComparable, ICloneable
     {
         /// <summary>
         /// Информация объекта
@@ -40,6 +40,13 @@ namespace lab12._3
         public Point(T data)
         {
             this.Data = data;
+            this.Left = null;
+            this.Right = null;
+        }
+
+        public Point(Point<T> point)
+        {
+            this.Data = (T)(point.Data).Clone();
             this.Left = null;
             this.Right = null;
         }
