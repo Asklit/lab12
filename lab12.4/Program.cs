@@ -84,7 +84,7 @@ namespace lab12_4
             if (array == null) Console.WriteLine("Массив пустой");
             else
             {
-                int num = 1;
+                int num = 0;
                 foreach (MusicalInstrument m in array)
                 {
                     Console.Write($"{num}. ");
@@ -263,7 +263,7 @@ namespace lab12_4
                 return null;
             }
             Console.WriteLine("Введите индекс, начиная с которого скопировать элементы в массив.");
-            int index = GetInt(0, tree.Count - 1);
+            int index = GetInt(0, (Math.Min(100, tree.Count * 10)));
             MusicalInstrument[] array = new MusicalInstrument[tree.Count + index];
             tree.CopyTo(array, arrayIndex: index);
             Console.WriteLine("Успешно преобразовано дерево поиска в массив.");
