@@ -3,6 +3,7 @@ using Musical_Instrument;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -15,9 +16,10 @@ namespace lab12._4
     {
         public MyCollection() : base() { }
         public MyCollection(int len) : base(len) { }
-        /// public MyCollection(MyCollection<T> collection) : base(collection) { }
+        public MyCollection(MyCollection<T> collection) : base(collection) { }
         public MyCollection(int len, Point<T> root) : base(len, root) { }
 
+        [ExcludeFromCodeCoverage]
         public bool IsReadOnly => throw new NotImplementedException();
 
         /// <summary>
@@ -44,9 +46,9 @@ namespace lab12._4
         /// <returns>True/False</returns>
         public bool Contains(T item)
         {
-            foreach (var elem in this)
-                if (elem.Equals(item)) return true;
-            return false;
+            bool flag = false;
+            RecursiveContainsItemInFindTree(root, new Point<T>(item), ref flag);
+            return flag;
         }
 
         /// <summary>
@@ -68,13 +70,13 @@ namespace lab12._4
         /// <summary>
         /// Преобразование информации в массив
         /// </summary>
-        public void CopyTo(T[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex = 0)
         {
-            int index = 0;
+            if (array.Length - arrayIndex < Count) throw new Exception("Длина массива меньше длины коллекции.");
             foreach (T item in this)
             {
-                array[index] = item;
-                index++;
+                array[arrayIndex] = item;
+                arrayIndex++;
             }
         }
 
@@ -114,6 +116,7 @@ namespace lab12._4
             }
         }
 
+        [ExcludeFromCodeCoverage]
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();

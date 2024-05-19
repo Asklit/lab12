@@ -3,6 +3,7 @@ using Musical_Instrument;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TreeTest
 {
@@ -152,6 +153,15 @@ namespace TreeTest
             data2.RandomInit();
             Point<Guitar> point2 = new Point<Guitar>(data2);
             Assert.Throws<Exception>(() => point.CompareTo(point2));
+        }
+
+        [Fact]
+        public void TestAddOneItemAsRoot() 
+        {
+            MyTree<MusicalInstrument> tree = new MyTree<MusicalInstrument>(0);
+            MusicalInstrument data = new MusicalInstrument();
+            data.RandomInit();
+            tree.AddPointToFindTree(data, tree.root);
         }
     }
 }

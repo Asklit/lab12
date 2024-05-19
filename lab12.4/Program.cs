@@ -11,11 +11,12 @@ namespace lab12_4
     class Program
     {
         const int min = 1;
-        const int max = 8;
+        const int max = 10;
 
         static void Main(string[] args)
         {
             MyCollection<MusicalInstrument>? findTree = null;
+            MusicalInstrument[] array = null;
             bool exit = false;
             do
             {
@@ -47,6 +48,12 @@ namespace lab12_4
                         findTree = ClearTree(findTree); // Удаление дерева поиска из памяти
                         break;
                     case 8:
+                        array = ConvertToArray(findTree);
+                        break;
+                    case 9:
+                        PrintArray(array);
+                        break;
+                    case 10:
                         exit = true; // Выход из программы
                         break;
                 }
@@ -61,13 +68,31 @@ namespace lab12_4
             Console.WriteLine();
             Console.WriteLine("Выберите пункт меню из списка:");
             Console.WriteLine("1. Сформировать дерево поиска и заполнить ее рандомными значениями.");
-            Console.WriteLine("3. Распечатать дерево поиска в красивом виде.");
+            Console.WriteLine("2. Распечатать дерево поиска в красивом виде.");
             Console.WriteLine("3. Распечатать дерево поиска с помощью итерфейса IEnumerable.");
             Console.WriteLine("4. Добавить рандомный элемент методом Add.");
             Console.WriteLine("5. Проверить наличие элемента в дереве поиска.");
             Console.WriteLine("6. Удалить элемент из дерева поиска (Remove).");
             Console.WriteLine("7. Удалить дерево поиска из памяти методом Clear.");
-            Console.WriteLine("8. Завершние работы.");
+            Console.WriteLine("8. Преобразовать дерево в массив.");
+            Console.WriteLine("9. Вывести массив в консоль.");
+            Console.WriteLine("10. Завершние работы.");
+        }
+
+        static void PrintArray(MusicalInstrument[] array)
+        {
+            if (array == null) Console.WriteLine("Массив пустой");
+            else
+            {
+                int num = 1;
+                foreach (MusicalInstrument m in array)
+                {
+                    Console.Write($"{num}. ");
+                    Console.WriteLine(m);
+                    num++;
+                }
+            }
+                
         }
 
         /// <summary>
@@ -159,6 +184,10 @@ namespace lab12_4
             }
             MusicalInstrument mi = new MusicalInstrument();
             mi.RandomInit();
+            while (tree.Contains(mi)) // Проверка на добавление существующего элемента
+            {
+                mi.RandomInit();
+            }
             tree.Add(mi);
             Console.WriteLine("Элемент успешно добавлен");
             return tree;
@@ -220,6 +249,25 @@ namespace lab12_4
                 Console.WriteLine("Дерево удалено из памяти");
             }
             return null;
+        }
+
+        /// <summary>
+        /// Преобразование в массив
+        /// </summary>
+        /// <param name="tree"></param>
+        static MusicalInstrument[] ConvertToArray(MyCollection<MusicalInstrument> tree)
+        {
+            if (tree == null)
+            {
+                Console.WriteLine("Дерево пустое");
+                return null;
+            }
+            Console.WriteLine("Введите индекс, начиная с которого скопировать элементы в массив.");
+            int index = GetInt(0, tree.Count - 1);
+            MusicalInstrument[] array = new MusicalInstrument[tree.Count + index];
+            tree.CopyTo(array, arrayIndex: index);
+            Console.WriteLine("Успешно преобразовано дерево поиска в массив.");
+            return array;
         }
     }
 }

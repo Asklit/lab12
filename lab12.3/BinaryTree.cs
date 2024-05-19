@@ -55,7 +55,7 @@ namespace lab12._3
         {
             root = new Point<T>(tree.root);
             count = tree.count;
-            CloneTree(root, tree.root);
+            root = CloneTree(root, tree.root);
         }
 
         /// <summary>
@@ -277,7 +277,6 @@ namespace lab12._3
             if (count == 0)
                 root = null;
             return current;
-
         }
 
         /// <summary>
@@ -287,6 +286,28 @@ namespace lab12._3
         {
             DeleteRecursive(root);
             root = null;
+        }
+
+        /// <summary>
+        /// Поиск элемента в дереве поиска
+        /// </summary>
+        protected void RecursiveContainsItemInFindTree(Point<T> current, Point<T> item, ref bool flag)
+        {
+            if (!flag && current != null)
+            {
+                if (current.CompareTo(item) == 0)
+                {
+                    flag = true;
+                }
+                else if (current.CompareTo(item) > 0)
+                {
+                    RecursiveContainsItemInFindTree(current.Left, item, ref flag);
+                }
+                else
+                {
+                    RecursiveContainsItemInFindTree(current.Right, item, ref flag);
+                }
+            }
         }
     }
 }

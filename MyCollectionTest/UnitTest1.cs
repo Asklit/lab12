@@ -85,7 +85,7 @@ namespace MyCollectionTest
         /// Проверка Remove
         /// </summary>
         [Fact]
-        public void TestRemove()
+        public void TestRemoveRoot()
         {
             MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(100);
             MyCollection<MusicalInstrument> findTree = collection.ConvertToFindTree();
@@ -105,13 +105,136 @@ namespace MyCollectionTest
         }
 
         /// <summary>
+        /// Проверка Remove
+        /// </summary>
+        [Fact]
+        public void TestRemoveRootLeftItem()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(100);
+            MyCollection<MusicalInstrument> findTree = collection.ConvertToFindTree();
+            Point<MusicalInstrument> point;
+            while (collection.root.Left == null)
+            {
+                collection = new MyCollection<MusicalInstrument>(100);
+            }
+            Assert.True(findTree.Remove(findTree.root.Left.Data));
+        }
+
+        /// <summary>
+        /// Проверка Remove
+        /// </summary>
+        [Fact]
+        public void TestRemoveExtremeItem()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(100);
+            MyCollection<MusicalInstrument> findTree = collection.ConvertToFindTree();
+            Point<MusicalInstrument> point;
+            while (collection.root.Right == null)
+            {
+                collection = new MyCollection<MusicalInstrument>(100);
+            }
+            collection.root.Right.Right = null;
+            collection.root.Right.Left = null;
+            Assert.True(findTree.Remove(findTree.root.Right.Data));
+        }
+
+        /// <summary>
+        /// Проверка Remove
+        /// </summary>
+        [Fact]
+        public void TestRemoveOneNullNextItem()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(100);
+            MyCollection<MusicalInstrument> findTree = collection.ConvertToFindTree();
+            Point<MusicalInstrument> point;
+            while (collection.root.Right == null)
+            {
+                collection = new MyCollection<MusicalInstrument>(100);
+            }
+            collection.root.Right.Left = null;
+            MusicalInstrument mi = new MusicalInstrument();
+            mi.RandomInit();
+            collection.root.Right.Right = new Point<MusicalInstrument>(mi);
+            Assert.True(findTree.Remove(findTree.root.Right.Data));
+        }
+
+        /// <summary>
+        /// Проверка Remove 1 элемента из коллекции
+        /// </summary>
+        [Fact]
+        public void TestRemoveFromOneLenCollection()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(1);
+            collection = collection.ConvertToFindTree();
+            Assert.True(collection.Remove(collection.root.Data));
+        }
+
+        /// <summary>
         /// Тестирование конструктора без параметров
         /// </summary>
         [Fact]
         public void TestConstructor()
         {
             MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>();
+            collection = collection.ConvertToFindTree();
             Assert.Equal(10, collection.Count);
+        }
+
+        /// <summary>
+        /// Проверка корректного получения сообщения о ошибке при вызове CopyTo
+        /// </summary>
+        [Fact]
+        public void TestCopyToException() 
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>();
+            collection = collection.ConvertToFindTree();
+            MusicalInstrument[] array = new MusicalInstrument[5];
+            Assert.Throws<Exception>(() => collection.CopyTo(array));
+        }
+
+        /// <summary>
+        /// Проверка создания клона коллекции
+        /// </summary>
+        [Fact]
+        public void TestConstructorCopy()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>();
+            collection = collection.ConvertToFindTree();
+            MyCollection<MusicalInstrument> collection2 = new MyCollection<MusicalInstrument>(collection);
+            collection.root.Data.RandomInit();
+            Assert.NotEqual(collection.root.Data, collection2.root.Data);
+            Assert.Equal(collection.root.Left.Data, collection2.root.Left.Data);
+            Assert.Equal(collection.root.Right.Data, collection2.root.Right.Data);
+        }
+
+        /// <summary>
+        /// Проверка Contains
+        /// </summary>
+        [Fact]
+        public void TestContainsRightItem()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(100);
+            MyCollection<MusicalInstrument> findTree = collection.ConvertToFindTree();
+            while (findTree.root.Right == null)
+            {
+                findTree = new MyCollection<MusicalInstrument>(100);
+            }
+            Assert.True(findTree.Contains(findTree.root.Right.Data));
+        }
+
+        /// <summary>
+        /// Проверка Contains
+        /// </summary>
+        [Fact]
+        public void TestContainsLeftItem()
+        {
+            MyCollection<MusicalInstrument> collection = new MyCollection<MusicalInstrument>(100);
+            MyCollection<MusicalInstrument> findTree = collection.ConvertToFindTree();
+            while (findTree.root.Left == null)
+            {
+                findTree = new MyCollection<MusicalInstrument>(100);
+            }
+            Assert.True(findTree.Contains(findTree.root.Left.Data));
         }
     }
 }
