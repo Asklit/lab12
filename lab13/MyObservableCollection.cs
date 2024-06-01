@@ -8,68 +8,64 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace lab13
 {
-    delegate void Handler();
+    public delegate void CollectionHandler(object source, CollectionHandlerEventArgs args);
 
-    internal class MyObservableCollection<T> : MyCollection<T> where T : IInit, ICloneable, IComparable, new()
+    public class MyObservableCollection<T> : MyCollection<T> where T : IInit, ICloneable, IComparable, new()
     {
-        public MyObservableCollection() : base() { }
-        public MyObservableCollection(int len) : base(len) { }
-        public MyObservableCollection(MyObservableCollection<T> collection) : base(collection) { }
-        public MyObservableCollection(int len, Point<T> root) : base(len, root) { }
+        public string NameCollection;
 
-        public int Length 
-        {
-            get => count;
-        }
+        public MyObservableCollection(string name = "Бинарное дерево") : base() { NameCollection = name; }
+        public MyObservableCollection(int len, string name = "Бинарное дерево") : base(len) { NameCollection = name; }
 
-        public T this[int index]
+        public event CollectionHandler? CollectionCountChanged;
+        public event CollectionHandler? CollectionReferenceChanged;
+
+        public void RegisterCountChangedHandler(CollectionHandler handler) => CollectionCountChanged += handler;
+        public void RegisterReferenceChangedHandler(CollectionHandler handler) => CollectionReferenceChanged += handler;
+
+        private void OnCollectionCountChanged(object source, CollectionHandlerEventArgs args) => CollectionCountChanged?.Invoke(source, args);
+
+        private void OnCollectionReferenceChanged(object source, CollectionHandlerEventArgs args) => CollectionReferenceChanged?.Invoke(source, args);
+
+        public Point<T> this[T item]
         {
             get
             {
-                if (index < count)
-                {
-                    int ind = 0;
-                    foreach (var item in this)
-                    {
-                        if (ind == index)
-                        {
-                            return item;
-                        }
-                        ind++;
-                    }
-                }
-                return default(T);
+                return GetItem(item);
             }
             set
             {
-                if (index < count)
+                bool isValueInCollection = Contains(value.Data);
+                if (!isValueInCollection)
                 {
-                    int ind = 0;
-                    bool flag = false;
-                    foreach (var item in this)
+                    bool isItemDeleted = false;
+                    RecursiveRemove(root, new Point<T>(item), ref isItemDeleted);
+                    if (isItemDeleted)
                     {
-                        if (ind == index)
-                        {
-                            RecursiveRemove(root, new Point<T>(item), ref flag);
-                            break;
-                        }
-                        ind++;
+                        OnCollectionReferenceChanged(this, new(NameCollection, "Элемент изменен в дереве", item));
+                        AddPointToFindTree(value.Data, root);
+                        count++;
                     }
-                    if (flag)
-                    {
-                        Add(value);
-                    }
-                }
-                else
-                {
-                    throw new Exception("Len error");
                 }
             }
         }
 
+        public new void Add(T item)
+        {
+            base.Add(item);
+            OnCollectionCountChanged(this, new(NameCollection, "Элемент успешно добавлен", item));
+        }
 
+        public new bool Remove(T item)
+        {
+            bool flag = base.Remove(item);
+            if (flag)
+                OnCollectionCountChanged(this, new(NameCollection, "Элемент успешно удален", item));
+            return flag;
+        }
     }
 }

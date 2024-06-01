@@ -26,7 +26,7 @@ namespace lab12._3
         /// </summary>
         protected int count = 0;
 
-        public int Count => count;
+        public int Count { get => count; set { count = value; } }
 
         /// <summary>
         /// Констурктор создания сбалансированного дерева заданной длины
@@ -77,7 +77,7 @@ namespace lab12._3
         /// </summary>
         /// <param name="len">длина дерева</param>
         /// <returns>Значение поддерева (ссылка на элемент Point)</returns>
-        Point<T>? MakeTree(int len)
+        public Point<T>? MakeTree(int len)
         {
             T data = new T();
             data.RandomInit();
@@ -286,6 +286,7 @@ namespace lab12._3
         {
             DeleteRecursive(root);
             root = null;
+            count = 0;
         }
 
         /// <summary>
@@ -306,6 +307,40 @@ namespace lab12._3
                 else
                 {
                     RecursiveContainsItemInFindTree(current.Right, item, ref flag);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Вернуть вершину T
+        /// </summary>
+        public Point<T> GetItem(T item)
+        {
+            Point<T> foundPoint = null;
+
+            Point<T> itemForSearch = new Point<T>(item);
+            SeachItem(root, itemForSearch, ref foundPoint);
+            return foundPoint;
+        }
+
+        /// <summary>
+        /// Поиск точки с T
+        /// </summary>
+        void SeachItem(Point<T> current, Point<T> itemForSearch, ref Point<T> foundPoint)
+        {
+            if (foundPoint == null && current != null)
+            {
+                if (current.CompareTo(itemForSearch) == 0)
+                {
+                    foundPoint = current;
+                }
+                else if (current.CompareTo(itemForSearch) > 0)
+                {
+                    SeachItem(current.Left, itemForSearch, ref foundPoint);
+                }
+                else
+                {
+                    SeachItem(current.Right, itemForSearch, ref foundPoint);
                 }
             }
         }
