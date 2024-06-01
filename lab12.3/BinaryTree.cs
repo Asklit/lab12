@@ -336,11 +336,11 @@ namespace lab12._3
                 }
                 else if (current.CompareTo(itemForSearch) > 0)
                 {
-                    SeachItem(current.Left, itemForSearch, ref foundPoint);
+                    SeachItem(current.Right, itemForSearch, ref foundPoint);
                 }
                 else
                 {
-                    SeachItem(current.Right, itemForSearch, ref foundPoint);
+                    SeachItem(current.Left, itemForSearch, ref foundPoint);
                 }
             }
         }

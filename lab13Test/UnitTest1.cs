@@ -46,10 +46,32 @@ namespace lab13Test
         }
 
         [Fact]
-        public void TestGetIndexer()
+        public void TestGetIndexerRoot()
         {
             MyObservableCollection<MusicalInstrument> firstObsCollection = new(10, "Первая коллекция");
             Assert.Equal(firstObsCollection[new(firstObsCollection.root.Data.Name, firstObsCollection.root.Data.Id.Number)].Data, new MusicalInstrument(firstObsCollection.root.Data.Name, firstObsCollection.root.Data.Id.Number));
+        }
+
+        [Fact]
+        public void TestGetIndexerLeftNode()
+        {
+            MyObservableCollection<MusicalInstrument> firstObsCollection = new(10, "Первая коллекция");
+            while (firstObsCollection.root.Left == null)
+                firstObsCollection = new(10, "Первая коллекция");
+            MusicalInstrument mi = firstObsCollection.root.Left.Data;   
+            Assert.Equal(firstObsCollection[new(mi.Name, mi.Id.Number)].Data, 
+                new MusicalInstrument(mi.Name, mi.Id.Number));
+        }
+
+        [Fact]
+        public void TestGetIndexerRightNode()
+        {
+            MyObservableCollection<MusicalInstrument> firstObsCollection = new(10, "Первая коллекция");
+            while (firstObsCollection.root.Right == null)
+                firstObsCollection = new(10, "Первая коллекция");
+            MusicalInstrument mi = firstObsCollection.root.Right.Data;
+            Assert.Equal(firstObsCollection[new(mi.Name, mi.Id.Number)].Data,
+                new MusicalInstrument(mi.Name, mi.Id.Number));
         }
 
         [Fact]
