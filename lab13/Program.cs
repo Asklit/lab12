@@ -271,9 +271,9 @@ namespace lab13
                 }
                 else
                 {
-                    Console.WriteLine("Введите id элемента ключа для удаления");
+                    Console.WriteLine("Введите id элемента ключа для изменения элемента");
                     int id = GetInt(0, int.MaxValue);
-                    Console.WriteLine("Введите имя элемента ключа для удаления");
+                    Console.WriteLine("Введите имя элемента ключа для изменения элемента");
                     string name = Console.ReadLine();
                     MusicalInstrument mi = new MusicalInstrument();
                     mi.RandomInit();
@@ -288,9 +288,9 @@ namespace lab13
                 }
                 else
                 {
-                    Console.WriteLine("Введите id элемента ключа для удаления");
+                    Console.WriteLine("Введите id элемента ключа изменения элемента");
                     int id = GetInt(0, int.MaxValue);
-                    Console.WriteLine("Введите имя элемента ключа для удаления");
+                    Console.WriteLine("Введите имя элемента ключа изменения элемента");
                     string name = Console.ReadLine();
                     MusicalInstrument mi = new MusicalInstrument();
                     mi.RandomInit();

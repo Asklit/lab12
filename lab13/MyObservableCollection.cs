@@ -43,7 +43,7 @@ namespace lab13
                 if (!isValueInCollection)
                 {
                     bool isItemDeleted = false;
-                    RecursiveRemove(root, new Point<T>(item), ref isItemDeleted);
+                    root = RecursiveRemove(root, new Point<T>(item), ref isItemDeleted);
                     if (isItemDeleted)
                     {
                         OnCollectionReferenceChanged(this, new(NameCollection, "Элемент изменен в дереве", item));
