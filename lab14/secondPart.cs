@@ -15,8 +15,8 @@ namespace lab14
         public static int LinqWhereRequest(MyCollection<MusicalInstrument> collection, string name)
         {
             return (from elem in collection
-                   where elem.Name == name
-                   select elem).Count();
+                    where elem.Name == name
+                    select elem).Count();
         }
 
         public static int ExtensionWhereRequest(MyCollection<MusicalInstrument> collection, string name)
@@ -50,7 +50,7 @@ namespace lab14
         {
             return (from elem in collection
                     select elem.Id.Number).Min();
-        } 
+        }
 
         public static int ExtensionMinRequest(MyCollection<MusicalInstrument> collection)
         {
@@ -68,13 +68,13 @@ namespace lab14
             return collection.Average(elem => elem.Id.Number);
         }
 
-        public static IEnumerable<IGrouping<string, MusicalInstrument>> LinqGroupByRequest(MyCollection<MusicalInstrument> collection)
+        public static IEnumerable<dynamic> LinqGroupByRequest(MyCollection<MusicalInstrument> collection)
         {
             return from elem in collection
                    group elem by elem.Name;
         }
 
-        public static IEnumerable<IGrouping<string, MusicalInstrument>> ExtensionGroupByRequest(MyCollection<MusicalInstrument> collection)
+        public static IEnumerable<dynamic> ExtensionGroupByRequest(MyCollection<MusicalInstrument> collection)
         {
             return collection.GroupBy(elem => elem.Name);
         }

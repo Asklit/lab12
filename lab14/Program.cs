@@ -15,7 +15,7 @@ namespace lab13
         public static SortedDictionary<string, List<MusicalInstrument>> firstPartCollection = new();
         public static MyCollection<MusicalInstrument> secondPartCollection = new(0);
 
-        static void Main(string[] args) 
+        static void Main(string[] args)
         {
             bool exit = false;
             do
@@ -122,7 +122,7 @@ namespace lab13
             Console.WriteLine("3. Вывести все группы с количесовом инструментов больше указанного. (Where)");
             Console.WriteLine("4. Вывод агрегирование данных (Sum, Min, Max, Avg)");
             Console.WriteLine("5. Вывести данные в сгрупперованном виде по названию инструмента (GroupBy)");
-            Console.WriteLine("6. Создать коллекцию и соединить с изначатьной и вывести в консоль результат (Join + Let)");
+            Console.WriteLine("6. Создать коллекцию и вывести в консоль результат соединения с инзачальной (без изменения изначальной) (Join + Let)");
             Console.WriteLine("7. Завершние работы.");
         }
 
@@ -184,7 +184,7 @@ namespace lab13
             Console.WriteLine("Введите длину словаря от 1 до 100.");
             int len = GetInt(1, 100);
             Random random = new Random();
-
+            firstPartCollection = new();
             for (int i = 0; i < len; i++)
             {
                 int count = random.Next(1, 5);
@@ -204,6 +204,7 @@ namespace lab13
             Console.Clear();
             Console.WriteLine("Введите длину дерева от 1 до 100.");
             int len = GetInt(1, 100);
+            secondPartCollection = new(0);
             for (int i = 0; i < len; i++)
             {
                 MusicalInstrument mi = new();
@@ -264,8 +265,8 @@ namespace lab13
             Console.Clear();
             Console.WriteLine("Введите количество инструментов для сравнения");
             int num = GetInt(1, 10);
-            IEnumerable<KeyValuePair<string, List<MusicalInstrument>>> res;
-            if (type == 1) 
+            IEnumerable<dynamic> res;
+            if (type == 1)
                 res = firstPart.LinqWhereRequest(firstPartCollection, num);
             else
                 res = firstPart.ExtensionWhereRequest(firstPartCollection, num);
@@ -336,14 +337,14 @@ namespace lab13
             Console.WriteLine("Введите тип запроса (Linq - 1, Extension - 2)");
             int type = GetInt(1, 2);
 
-            IEnumerable<IGrouping<string, MusicalInstrument>> res;
+            IEnumerable<dynamic> res;
             if (type == 1)
                 res = firstPart.LinqGroupByRequest(firstPartCollection);
             else
                 res = firstPart.ExtensionGroupByRequest(firstPartCollection);
             foreach (var item in res)
             {
-                Console.WriteLine($"Название инструмента: {item.Key}. Размер: {item.Count()}");
+                Console.WriteLine($"Название инструмента: {item.Key}.");
                 foreach (var elem in item)
                 {
                     Console.WriteLine($"    {elem}");
@@ -381,7 +382,7 @@ namespace lab13
                 temp.Add($"Группа {i + 1}", list);
             }
 
-            IEnumerable<KeyValuePair<string, List<MusicalInstrument>>> res;
+            IEnumerable<dynamic> res;
             if (type == 1)
                 res = firstPart.LinqJoinRequest(firstPartCollection, temp);
             else
@@ -464,7 +465,7 @@ namespace lab13
             Console.WriteLine("Введите тип запроса (Linq - 1, Extension - 2)");
             int type = GetInt(1, 2);
 
-            IEnumerable<IGrouping<string, MusicalInstrument>> res;
+            IEnumerable<dynamic> res;
             if (type == 1)
                 res = secondPart.LinqGroupByRequest(secondPartCollection);
             else
@@ -475,7 +476,7 @@ namespace lab13
             {
                 foreach (var item in res)
                 {
-                    Console.WriteLine($"Название инструмента: {item.Key}. Размер: {item.Count()}");
+                    Console.WriteLine($"Название инструмента: {item.Key}.");
                     foreach (var elem in item)
                     {
                         Console.WriteLine($"    {elem}");

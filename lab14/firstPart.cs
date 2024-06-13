@@ -13,19 +13,19 @@ namespace lab14
         /// <summary>
         /// Получение всех групп с количесовом инструментов больше указанного
         /// </summary>
-        public static IEnumerable<KeyValuePair<string, List<MusicalInstrument>>> LinqWhereRequest(SortedDictionary<string, List<MusicalInstrument>> collection, int count)
+        public static IEnumerable<dynamic> LinqWhereRequest(SortedDictionary<string, List<MusicalInstrument>> collection, int count)
         {
             return from data in collection
                    where data.Value.Count > count
-                   select data;
+                   select new { Key = data.Key, Value = data.Value };
         }
 
         /// <summary>
         /// Получение всех групп с количесовом инструментов больше указанного
         /// </summary>
-        public static IEnumerable<KeyValuePair<string, List<MusicalInstrument>>> ExtensionWhereRequest(SortedDictionary<string, List<MusicalInstrument>> collection, int count)
+        public static IEnumerable<dynamic> ExtensionWhereRequest(SortedDictionary<string, List<MusicalInstrument>> collection, int count)
         {
-            return collection.Where(pair => pair.Value.Count > count);
+            return collection.Where(pair => pair.Value.Count > count).Select(pair => new { Key = pair.Key, Value = pair.Value }); ;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace lab14
         /// <summary>
         /// Группировка по названию интрументов
         /// </summary>
-        public static IEnumerable<IGrouping<string, MusicalInstrument>> LinqGroupByRequest(SortedDictionary<string, List<MusicalInstrument>> collection)
+        public static IEnumerable<dynamic> LinqGroupByRequest(SortedDictionary<string, List<MusicalInstrument>> collection)
         {
             return from groups in collection
                    from instrument in groups.Value
@@ -109,7 +109,7 @@ namespace lab14
         /// <summary>
         /// Группировка по названию интрументов
         /// </summary>
-        public static IEnumerable<IGrouping<string, MusicalInstrument>> ExtensionGroupByRequest(SortedDictionary<string, List<MusicalInstrument>> collection)
+        public static IEnumerable<dynamic> ExtensionGroupByRequest(SortedDictionary<string, List<MusicalInstrument>> collection)
         {
             return collection.SelectMany(pair => pair.Value, (pair, instrument) => new { Key = pair.Key, Value = instrument })
                      .GroupBy(x => x.Value.Name, x => x.Value);
@@ -118,19 +118,19 @@ namespace lab14
         /// <summary>
         /// Объединение коллекций
         /// </summary>
-        public static IEnumerable<KeyValuePair<string, List<MusicalInstrument>>> LinqJoinRequest(SortedDictionary<string, 
+        public static IEnumerable<dynamic> LinqJoinRequest(SortedDictionary<string,
             List<MusicalInstrument>> collection1, SortedDictionary<string, List<MusicalInstrument>> collection2)
         {
             return from data1 in collection1
                    join data2 in collection2 on data1.Key equals data2.Key
                    let combinedList = new List<MusicalInstrument>(data1.Value)
-                   select new KeyValuePair<string, List<MusicalInstrument>>(data1.Key, combinedList.Concat(data2.Value).ToList());
+                   select new { Key = data1.Key, Value = combinedList.Concat(data2.Value).ToList() };
         }
 
         /// <summary>
         /// Объединение коллекций
         /// </summary>
-        public static IEnumerable<KeyValuePair<string, List<MusicalInstrument>>> ExtensionJoinRequest(SortedDictionary<string, List<MusicalInstrument>> collection1, SortedDictionary<string, List<MusicalInstrument>> collection2)
+        public static IEnumerable<dynamic> ExtensionJoinRequest(SortedDictionary<string, List<MusicalInstrument>> collection1, SortedDictionary<string, List<MusicalInstrument>> collection2)
         {
             return collection1.Join(collection2,
                                     data1 => data1.Key,
@@ -139,7 +139,7 @@ namespace lab14
                                     {
                                         var combinedList = new List<MusicalInstrument>(data1.Value);
                                         combinedList.AddRange(data2.Value);
-                                        return new KeyValuePair<string, List<MusicalInstrument>>(data1.Key, combinedList);
+                                        return new { Key = data1.Key, Value = combinedList };
                                     });
         }
     }
