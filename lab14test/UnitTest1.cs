@@ -1,5 +1,6 @@
 using lab14;
 using Musical_Instrument;
+using System.Runtime.CompilerServices;
 
 namespace lab14test
 {
@@ -188,9 +189,13 @@ namespace lab14test
 
             var max = firstPart.LinqGroupByRequest(collection);
             int count = 3;
+            int ans;
             foreach (var item in max)
             {
-                Assert.Equal(count, item.Count());
+                ans = 0;
+                foreach (var item2 in item)
+                    ans++;
+                Assert.Equal(count, ans);
                 count++;
             }
         }
@@ -228,9 +233,13 @@ namespace lab14test
 
             var max = firstPart.ExtensionGroupByRequest(collection);
             int count = 3;
+            int ans;
             foreach (var item in max)
             {
-                Assert.Equal(count, item.Count());
+                ans = 0;
+                foreach (var item2 in item)
+                    ans++;
+                Assert.Equal(count, ans);
                 count++;
             }
         }

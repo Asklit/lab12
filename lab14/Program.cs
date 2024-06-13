@@ -4,7 +4,9 @@ using Microsoft.VisualBasic;
 using Musical_Instrument;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("lab14test")]
 namespace lab13
 {
     class Program

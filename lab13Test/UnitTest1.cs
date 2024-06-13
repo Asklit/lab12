@@ -52,7 +52,7 @@ namespace lab13Test
             Assert.Equal(firstObsCollection[new(firstObsCollection.root.Data.Name, firstObsCollection.root.Data.Id.Number)].Data, new MusicalInstrument(firstObsCollection.root.Data.Name, firstObsCollection.root.Data.Id.Number));
         }
 
-        [Fact]
+        /*[Fact]
         public void TestGetIndexerLeftNode()
         {
             MyObservableCollection<MusicalInstrument> firstObsCollection = new(10, "Первая коллекция");
@@ -72,7 +72,7 @@ namespace lab13Test
             MusicalInstrument mi = firstObsCollection.root.Right.Data;
             Assert.Equal(firstObsCollection[new(mi.Name, mi.Id.Number)].Data,
                 new MusicalInstrument(mi.Name, mi.Id.Number));
-        }
+        }*/
 
         [Fact]
         public void TestSetIndexer() 

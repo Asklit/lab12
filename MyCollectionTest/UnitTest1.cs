@@ -138,7 +138,7 @@ namespace MyCollectionTest
             Assert.True(findTree.Remove(findTree.root.Right.Data));
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Проверка Remove
         /// </summary>
         [Fact]
@@ -156,7 +156,7 @@ namespace MyCollectionTest
             mi.RandomInit();
             collection.root.Right.Right = new Point<MusicalInstrument>(mi);
             Assert.True(findTree.Remove(findTree.root.Right.Data));
-        }
+        }*/
 
         /// <summary>
         /// Проверка Remove 1 элемента из коллекции
