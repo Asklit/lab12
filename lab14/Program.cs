@@ -122,7 +122,7 @@ namespace lab13
             Console.WriteLine("1. Сформировать коллекцию SortedDictionary<string, List<MusicalInstrument>>");
             Console.WriteLine("2. Распечатать коллекцию.");
             Console.WriteLine("3. Вывести все группы с количесовом инструментов больше указанного. (Where)");
-            Console.WriteLine("4. Вывод агрегирование данных (Sum, Min, Max, Avg)");
+            Console.WriteLine("4. Вывод агрегированых данных (Sum, Min, Max, Avg)");
             Console.WriteLine("5. Вывести данные в сгрупперованном виде по названию инструмента (GroupBy)");
             Console.WriteLine("6. Создать коллекцию и вывести в консоль результат соединения с инзачальной (без изменения изначальной) (Join + Let)");
             Console.WriteLine("7. Завершние работы.");
@@ -138,7 +138,7 @@ namespace lab13
             Console.WriteLine("1. Сформировать коллекцию (дерево поиска) и заполнить ее рандомными значениями.");
             Console.WriteLine("2. Распечатать коллекцию.");
             Console.WriteLine("3. Узнать количество определленных инструментов. (Where + Count)");
-            Console.WriteLine("4. Вывод агрегирование данных (Sum, Min, Max, Avg)");
+            Console.WriteLine("4. Вывод агрегированых данных (Sum, Min, Max, Avg)");
             Console.WriteLine("5. Группировка данных (GroupBy)");
             Console.WriteLine("6. Завершние работы.");
         }
